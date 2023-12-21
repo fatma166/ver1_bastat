@@ -1,0 +1,1361 @@
+{
+	"info": {
+		"_postman_id": "3e0c6313-43d5-48b6-b156-1c122e468d7a",
+		"name": "bastaat",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4045848",
+		"_collection_link": "https://interstellar-robot-833268.postman.co/workspace/Team-Workspace~1dd9d509-4f72-41ff-8d7b-a1af934a9423/collection/4045848-3e0c6313-43d5-48b6-b156-1c122e468d7a?action=share&source=collection_link&creator=4045848"
+	},
+	"item": [
+		{
+			"name": "restuarant",
+			"item": [
+				{
+					"name": "list resturant",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/restaurants/list?compilation_id=1&lati=30.5537199&longi=31.0421278&zone_id&limit=3&offset=0&filter_data={}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"restaurants",
+								"list"
+							],
+							"query": [
+								{
+									"key": "compilation_id",
+									"value": "1",
+									"description": "this main classification"
+								},
+								{
+									"key": "lati",
+									"value": "30.5537199",
+									"description": "required_if zone_id null"
+								},
+								{
+									"key": "longi",
+									"value": "31.0421278",
+									"description": "required_if zone_id null"
+								},
+								{
+									"key": "zone_id",
+									"value": null,
+									"description": "required if lati&longi"
+								},
+								{
+									"key": "limit",
+									"value": "3",
+									"description": "required"
+								},
+								{
+									"key": "offset",
+									"value": "0",
+									"description": "required|nullable"
+								},
+								{
+									"key": "filter_data",
+									"value": "{}",
+									"description": "use in serach"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "popular restaurants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}restaurants/popular?lati=30.5537199&longi=31.0421278&zone_id&limit=3&offset=1",
+							"host": [
+								"{{url}}restaurants"
+							],
+							"path": [
+								"popular"
+							],
+							"query": [
+								{
+									"key": "lati",
+									"value": "30.5537199",
+									"description": "required if zone id is null"
+								},
+								{
+									"key": "longi",
+									"value": "31.0421278",
+									"description": "required if zone id is null"
+								},
+								{
+									"key": "zone_id",
+									"value": null,
+									"description": "required if lati or longi  is null"
+								},
+								{
+									"key": "limit",
+									"value": "3",
+									"description": "required"
+								},
+								{
+									"key": "offset",
+									"value": "1",
+									"description": "required or null"
+								}
+							]
+						},
+						"description": "- Most Popular places\n- use in home at bootom\n    \n- required location if zone_id is nullable"
+					},
+					"response": []
+				},
+				{
+					"name": "resturant details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}restaurants/details/3",
+							"host": [
+								"{{url}}restaurants"
+							],
+							"path": [
+								"details",
+								"3"
+							]
+						},
+						"description": "- get single restaurant data"
+					},
+					"response": []
+				},
+				{
+					"name": "latest_restaurants",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}restaurants/latest?type=most_order&lati=30.5537199&longi=31.0421278&zone_id&limit=3",
+							"host": [
+								"{{url}}restaurants"
+							],
+							"path": [
+								"latest"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "most_order"
+								},
+								{
+									"key": "lati",
+									"value": "30.5537199"
+								},
+								{
+									"key": "longi",
+									"value": "31.0421278"
+								},
+								{
+									"key": "zone_id",
+									"value": null
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								}
+							]
+						},
+						"description": "get latest added places in system"
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"description": "every thing about restuarant\n\n\\-list\n\n\\-get popular resturant to user\n\n\\-get single restaurant details\n\n\\-get last added restaurants or places"
+		},
+		{
+			"name": "food",
+			"item": [
+				{
+					"name": "list_food",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/food/list?restaurant_id=3&lati=30.5537199&longi=31.0421278&zone_id&limit=3&offset=0",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"food",
+								"list"
+							],
+							"query": [
+								{
+									"key": "restaurant_id",
+									"value": "3"
+								},
+								{
+									"key": "lati",
+									"value": "30.5537199"
+								},
+								{
+									"key": "longi",
+									"value": "31.0421278"
+								},
+								{
+									"key": "zone_id",
+									"value": null
+								},
+								{
+									"key": "limit",
+									"value": "3"
+								},
+								{
+									"key": "offset",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "single-food",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/food/single-food?food_id=3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"food",
+								"single-food"
+							],
+							"query": [
+								{
+									"key": "food_id",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "compilation",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}compilations/list",
+							"host": [
+								"{{url}}compilations"
+							],
+							"path": [
+								"list"
+							]
+						},
+						"description": "main classification\n\nget main categories in app like \"طعام-بقاله-مخبوزات\""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "get one category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/category/get-cat?id=2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"category",
+								"get-cat"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}category/list?id=1&category_ids=[1,2]",
+							"host": [
+								"{{url}}category"
+							],
+							"path": [
+								"list"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"description": "compilation_id required main classification"
+								},
+								{
+									"key": "category_ids",
+									"value": "[1,2]",
+									"description": "nullable to get all or pass category_ids that come with single restuarant"
+								}
+							]
+						},
+						"description": "- list all categories in single classification\n    \n- get all or pass category_ids that come with single restuarant to get speciefic cats"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth user",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth user",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "f_name",
+									"value": "fatmaapi",
+									"type": "text"
+								},
+								{
+									"key": "l_name",
+									"value": "gh_7",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "+2001022752344",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "active",
+									"value": "0",
+									"type": "default"
+								},
+								{
+									"key": "email",
+									"value": "fatmaghareeb@gmail.com",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}auth/register",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-roles",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}auth/get-roles",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"get-roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "phone",
+									"value": "+2001022752344",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}auth/login",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "countries",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}auth/get-countries?locale=1",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"get-countries"
+							],
+							"query": [
+								{
+									"key": "locale",
+									"value": "1"
+								},
+								{
+									"key": "id",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "locale is langauage id to return data"
+					},
+					"response": []
+				},
+				{
+					"name": "varfy phone number",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "verification_code",
+									"value": "373702",
+									"type": "default"
+								},
+								{
+									"key": "phone",
+									"value": "+2001022752344",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}auth/verify",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"verify"
+							],
+							"query": [
+								{
+									"key": "phone",
+									"value": "+2001022752344",
+									"disabled": true
+								}
+							]
+						},
+						"description": "verification_code get from mail msg"
+					},
+					"response": []
+				},
+				{
+					"name": "forgetpassword",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "phone",
+									"value": "+2001022752344",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/auth/forgetPassword",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"forgetPassword"
+							],
+							"query": [
+								{
+									"key": "phone",
+									"value": "+2001022752344",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "validatePassowrd",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "769909",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "12345678",
+									"type": "default"
+								},
+								{
+									"key": "confirmpass",
+									"value": "12345678",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}auth/validatePassowrd",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"validatePassowrd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userData",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}auth/get-user-data",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"get-user-data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}auth/logout",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept-Language",
+								"value": "{{lang}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{url}}auth/refresh",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "store-device-token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "token",
+									"value": "1234",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}auth/store-device-token",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"store-device-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "check-login",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}auth/check-login",
+							"host": [
+								"{{url}}auth"
+							],
+							"path": [
+								"check-login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "cart order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "order_amount",
+									"value": "360",
+									"type": "text"
+								},
+								{
+									"key": "payment_method",
+									"value": "wallet",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "restaurant_id",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "{\"contact_person_number\":\"ahmed\",\"address\":\"tiyleklj\",\"contact_person_name\":\"contact_person_name\",\"floor\":\"floor\",\"house\":\"house\"}",
+									"type": "text"
+								},
+								{
+									"key": "lati",
+									"value": "30.5537199",
+									"type": "text"
+								},
+								{
+									"key": "longi",
+									"value": "31.0421278",
+									"type": "text"
+								},
+								{
+									"key": "cart_items",
+									"value": "{\"food_id\" :\" 1\", \"quantity\" :\"2\", \"price\": \"80\"}",
+									"type": "text"
+								},
+								{
+									"key": "address_id",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "order_type",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}order/cart",
+							"host": [
+								"{{url}}order"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pervious address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}order/pervious-address",
+							"host": [
+								"{{url}}order"
+							],
+							"path": [
+								"pervious-address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "track order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}order/track-order?order_id=100008",
+							"host": [
+								"{{url}}order"
+							],
+							"path": [
+								"track-order"
+							],
+							"query": [
+								{
+									"key": "order_id",
+									"value": "100008"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}order/list",
+							"host": [
+								"{{url}}order"
+							],
+							"path": [
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancle order",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}order/cancel-order?order_id=100008",
+							"host": [
+								"{{url}}order"
+							],
+							"path": [
+								"cancel-order"
+							],
+							"query": [
+								{
+									"key": "order_id",
+									"value": "100008"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "reviews",
+			"item": [
+				{
+					"name": "add-review-restuarant",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "get-review-restaurant",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "userinfo&address",
+			"item": [
+				{
+					"name": "add address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "address",
+									"value": "بركه السبع",
+									"type": "text"
+								},
+								{
+									"key": "floor",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "contact_person_number",
+									"value": "8775645656",
+									"type": "text"
+								},
+								{
+									"key": "road",
+									"value": "طريق الحماديه",
+									"type": "text"
+								},
+								{
+									"key": "house",
+									"value": "منزل رقم4",
+									"type": "text"
+								},
+								{
+									"key": "lati",
+									"value": "30.5537199",
+									"type": "text"
+								},
+								{
+									"key": "longi",
+									"value": "31.0421278",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}user/add-address",
+							"host": [
+								"{{url}}user"
+							],
+							"path": [
+								"add-address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "address_id",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "بركه السبع",
+									"type": "text"
+								},
+								{
+									"key": "floor",
+									"value": "2",
+									"type": "text"
+								},
+								{
+									"key": "contact_person_number",
+									"value": "8775645656",
+									"type": "text"
+								},
+								{
+									"key": "road",
+									"value": "طريق الحماديه",
+									"type": "text"
+								},
+								{
+									"key": "house",
+									"value": "منزل رقم4",
+									"type": "text"
+								},
+								{
+									"key": "lati",
+									"value": "30.5537199",
+									"type": "text"
+								},
+								{
+									"key": "longi",
+									"value": "31.0421278",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}user/update-address",
+							"host": [
+								"{{url}}user"
+							],
+							"path": [
+								"update-address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete address",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "address_id",
+									"value": "4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}user/delete-address",
+							"host": [
+								"{{url}}user"
+							],
+							"path": [
+								"delete-address"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}user/info",
+							"host": [
+								"{{url}}user"
+							],
+							"path": [
+								"info"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "checkzone",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}zones?latitude=30.5537199&longitude=31.0421278",
+					"host": [
+						"{{url}}zones"
+					],
+					"query": [
+						{
+							"key": "latitude",
+							"value": "30.5537199"
+						},
+						{
+							"key": "longitude",
+							"value": "31.0421278"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "banners",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}get-banner?lati=30.5537199&longi=31.0421278",
+					"host": [
+						"{{url}}get-banner"
+					],
+					"query": [
+						{
+							"key": "lati",
+							"value": "30.5537199",
+							"description": "required"
+						},
+						{
+							"key": "longi",
+							"value": "31.0421278",
+							"description": "required"
+						}
+					]
+				},
+				"description": "**banner slider in the top of home page**\n\n**lati&longi must send**"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://127.0.0.1:8000/api/",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiZDc3MWQ3ZTdhYTA3ZjQ3NWFlZmFlYTA5YmY1ZDBlNjIyZTY3YzFmOGI0MGU0YWQ2ODFmMjk1YWU0ZWQ2Mzg4M2E0ZGU3Y2QxYTlmMWQ4YWMiLCJpYXQiOjE2OTczNjk1ODMuMjg1NjY1LCJuYmYiOjE2OTczNjk1ODMuMjg1NjcyLCJleHAiOjE3Mjg5OTE5ODMuMjU2MjEsInN1YiI6IjIiLCJzY29wZXMiOltdfQ.J2tk7FmpYxmQXkffkFoNT9R9ZyWYpj_tJ0lX_M6yNt8xyD0ZN1Pm126N2gS5Ph7aOgYYrp8NrjLfRExrpUtZf9xejyygnHp8npTM2kWD5ga8R_-W5YaZm1Xh2zZjRzpxy7kbQB2Z-LWOUCx2tpNTWpK31kVybLRPZENesNQhxOhliVsR0OsjJDjPAffgHrzY0STtGIAQZbRBG0bxFLpRNmyP7ja45YTRJ1tEETFH7lTAp2a_dcJatPZmaNm5whN0pMskkJJUKR9gdFDeukP2YTkwt11HnK0A8l38y5frpw9UeiTmvbmlJo9Awc0M1bbTD1jnGVkZMQ-vImcdQV7w-MpHB4jHteQIqPHrsp4R_KSmASzZ3iJaj-80usXc5mV--3ZbrlHVhgZPGCKfLgPXlw3kLLBM62O_A3jE8F3nMTFr2dVHrTCM42VOFly3Jmu_uCeSwuBaUo7soDjYmsZcPokMELLPAiyxBc9SfHuUiGvw6bxlVG70zd3aUL8VqUjxvki2PGMixw9v9E5Qt_3K3EBIR7PRfnsEoBLmiFKMXGGovJVuNOdoFzCmoYhXhl97KjuINVPXHdLYSOz5a9bxJuKfzwZ7FMO5epk3gM7zBBJEuRFSBDVWRq7XQwn7aLTOKWiLZM8iSHGeZ_DKLE7DaeVqgKnhzj5l2O9qFmlD75w",
+			"type": "string"
+		}
+	]
+}
