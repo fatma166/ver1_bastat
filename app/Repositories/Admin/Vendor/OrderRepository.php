@@ -3,6 +3,7 @@
 namespace App\Repositories\Admin\Vendor;
 
 use App\Models\Order;
+use App\Modules\Core\Helper;
 use App\Repositories\Admin\BaseRepository;
 use Carbon\Carbon;
 
@@ -33,6 +34,8 @@ class OrderRepository extends BaseRepository
    public function change_status($id,$status){
 
        $item= $this->model->where('id',$id)->update([$status=>Carbon::now(),'order_status'=>$status]);
+       $order=$this->model->where('id',$id)->first();
+       Helper::send_order_notification($order);
        return $item;
 
     }

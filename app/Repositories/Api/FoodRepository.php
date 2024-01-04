@@ -76,7 +76,7 @@ class FoodRepository implements FoodInterface
     public function single_food($food_id,$related_limit)
     {
         // TODO: Implement single_food() method.
-        return  $food= Food::active()->find($food_id);
+        return  $food= Food::active()->with('slider')->find($food_id);
 
 
     }

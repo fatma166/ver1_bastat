@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class BannerRepositories implements BannerInterface
 {
-    public function get_banner($zone_ids)
+    public function get_banner($zone_ids,$module_place)
     {
         // TODO: Implement get_banner() method.
 
@@ -27,7 +27,10 @@ class BannerRepositories implements BannerInterface
         $data = [];
         if(isset($zone_ids)&& count($zone_ids)!=0) {
             // $banners = BannerLogic::get_banners($zone_id);
-            $banners = Banner::active()->whereIn('zone_id',$zone_ids)->get();
+            $banners = Banner::active()->whereIn('zone_id',$zone_ids)->where(function ($query) use($module_place){
+                if($module_place!="all")
+                $query->where('module_place',$module_place);
+            })->orderBy('priority','desc')->get();
 
             foreach ($banners as  $banner) {
                 if ($banner->type == 'restaurant_wise') {

@@ -8,9 +8,11 @@ use App\Http\Requests\Api\WalletTransactionListRequest;
 use App\Libarary\CustomerPayLogic;
 use App\Models\Coupon;
 use App\Models\Food;
+use App\Models\OrderPaymentTransaction;
 use App\Models\PaymentMethod;
 use App\Models\Restaurant;
 use App\Models\WalletTransaction;
+use App\Models\WalletTransactionRefrance;
 use App\Modules\Core\HTTPResponseCodes;
 use App\Repositories\Api\OrderRepository;
 use Illuminate\Support\Facades\Validator;
@@ -77,7 +79,15 @@ class PaymentController extends Controller {
         $product_price = 0;
         $discount= 0;
         $reference = $request->input('reference'); // reference from order not input
-        $orderItems = json_decode($request->input('cart_items', []),true); // Add order items to the request
+        $orderItems =$request->input('cart_items');// Add order items to the request
+        $check_create=OrderPaymentTransaction::where('order_id',$reference)->first();
+      //  echo $check_create; exit;
+        if(isset($check_create['id'])) {
+            return response()->json([
+                'payment_id' =>$check_create['payment_id'],
+                'payment_link' => $check_create['payment_link'],
+            ]);
+        }
         $customerEmail = Auth::guard('api')->user()->email;//$request->input('customer_email'); // Add customer email to the request
         $voucher = $request->input('coupon_code');
         $restaurant_id = $request->input('restaurant_id');
@@ -92,7 +102,8 @@ class PaymentController extends Controller {
             if ($request['coupon_code'] && $request['coupon_code']!="null") {
 
                 $coupon = Coupon::active()->where(['code' => $request['coupon_code']])->first();
-                $staus = Helper::is_valide($coupon,Auth::guard('api')->user()->id,$restaurant_id,$orderItems);
+                $staus= Helper::is_valide($coupon,Auth::guard('api')->user()->id,$restaurant_id,$orderItems);
+               //print_r($staus); exit;
                 if ($staus == 407) {
                     return response()->json([
                         'status' => false,
@@ -117,7 +128,7 @@ class PaymentController extends Controller {
                      $coupon = null;
                      $free_delivery_by = 'admin';
                  }*/
-                else {
+              /*  else {
                     return response()->json([
                         'status' => false,
                         'errors' => [],
@@ -125,9 +136,10 @@ class PaymentController extends Controller {
                         'data' => [],
                         'code' => HTTPResponseCodes::BadRequest['code']
                     ], HTTPResponseCodes::Sucess['code']);
-                }
+                }*/
             }
               $order=new OrderRepository();
+
               $data=$order->calcualate_order_amount($request);
                 if(isset($data['status'])&& $data['status']==true){
                     $amount=$data['order_amount'];
@@ -250,6 +262,22 @@ class PaymentController extends Controller {
         // @todo save payment id with payment reference in table
         //cs_test_a1AH2zOFX2XMP9DUBfJGzIEVmUlyNuSTIQ2F02lkR5PWnxkyM3Bqmd8cqd
 
+
+
+
+           $order_pay = new OrderPaymentTransaction();
+           $order_pay->order_id = $reference;
+           $order_pay->user_id = Auth::guard('api')->user()->id;
+           $order_pay->payment_id = $payment_id;
+           $order_pay->payment_link = $paymentLink;
+           $order_pay->order_amount=$amount;
+           $order_pay->vendor_id=$restaurant_id;
+           $order_pay->delivery_charge=$delivery_charge;
+           $order_pay->discount=$discount;
+
+
+           $order_pay->save();
+
         return response()->json([
             'payment_id' => $payment_id,
             'payment_link' => $paymentLink,
@@ -263,8 +291,10 @@ class PaymentController extends Controller {
 
         // Extract relevant data from the request
         $amount = $request->input('amount'); //amount
+
         // Define success and cancel URLs
-        $reference="wallet charge";
+        $reference="wallet".time()."_".Auth::guard('api')->user()->id;
+
         $successUrl = route('payment.complete', ['reference' => $reference]);
         $cancelUrl = route('payment.complete', ['reference' => $reference]);
         $currency = config('app.currency'); // Change to your desired currency
@@ -286,6 +316,7 @@ class PaymentController extends Controller {
             'mode' => 'payment',
             'success_url' => $successUrl,
             'cancel_url' => $cancelUrl,
+            'customer_email'=>Auth::guard('api')->user()->email
         ]);
 
         // Generate a payment link for the transaction
@@ -294,7 +325,10 @@ class PaymentController extends Controller {
 
         // @todo save payment id with payment reference in table
         //cs_test_a1AH2zOFX2XMP9DUBfJGzIEVmUlyNuSTIQ2F02lkR5PWnxkyM3Bqmd8cqd
-
+        $wallet_ref=new WalletTransactionRefrance();
+        $wallet_ref->payment_intent= $payment_id;
+        $wallet_ref->referance_code=$reference;
+        $wallet_ref->save();
         return response()->json([
             'payment_id' => $payment_id,
             'payment_link' => $paymentLink,
@@ -307,19 +341,22 @@ class PaymentController extends Controller {
     // Retrieve the transaction ID from the Stripe API using the payment intent ID
     Stripe::setApiKey(config('stripe.secret_key'));
     $data = \Stripe\Checkout\Session::retrieve($paymentIntentId);
-
+   // echo ($data['payment_status']); exit;
+      // return response()->json($data);
     if($data['payment_status']=="paid"){
         $sucess=new OrderRepository();
-        $sucess->payment_success();
-        //CustomerPayLogic::create_wallet_transaction(Auth::guard('api')->user()->id, $order_amount, 'order_place',$last_order);
-        return response()->json([
-            'status' =>true,
-            'errors'=>[],
-            'message' =>__('success'),
-            'data' => [],
-            'code'=>HTTPResponseCodes::Sucess['code']
-        ],HTTPResponseCodes::Sucess['code']);
-    }else{
+       $return_status= $sucess->payment_success($data);
+       if($return_status==true) {
+           //CustomerPayLogic::create_wallet_transaction(Auth::guard('api')->user()->id, $order_amount, 'order_place',$last_order);
+           return response()->json([
+               'status' => true,
+               'errors' => [],
+               'message' => __('success'),
+               'data' => [],
+               'code' => HTTPResponseCodes::Sucess['code']
+           ], HTTPResponseCodes::Sucess['code']);
+       }
+    }
         return response()->json([
             'status' =>false,
             'errors'=>[],
@@ -327,7 +364,7 @@ class PaymentController extends Controller {
             'data' => [],
             'code'=>HTTPResponseCodes::BadRequest['code']
         ],HTTPResponseCodes::Sucess['code']);
-    }
+
     // return response()->json($data);
 }
 
@@ -341,7 +378,7 @@ class PaymentController extends Controller {
         $data = \Stripe\Checkout\Session::retrieve($paymentIntentId);
 
         if($data['payment_status']=="paid"){
-           $db_status= CustomerPayLogic::create_wallet_transaction(Auth::guard('api')->user()->id, $data['amount_total']/100, 'wallet_charge','wallet');
+           $db_status= CustomerPayLogic::create_wallet_transaction(Auth::guard('api')->user()->id, $data['amount_total']/100, 'wallet_charge',$data['id']);
             if($db_status==true) {
                 return response()->json([
                     'status' => true,
@@ -420,6 +457,7 @@ class PaymentController extends Controller {
             'total_size' => $paginator->total(),
             'limit' => $request->limit,
             'offset' => $request->offset,
+            'user_balance'=>Auth::guard('api')->user()->wallet_balance,
             'data' => $paginator->items()
         ];
         return response()->json([

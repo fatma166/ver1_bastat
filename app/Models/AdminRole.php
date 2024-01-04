@@ -36,4 +36,11 @@ class AdminRole extends Model
 		'modules',
 		'status'
 	];
+
+
+	public function admin(){
+
+            return $this->HasMany(Admin::class,'role_id');
+
+    }
 }

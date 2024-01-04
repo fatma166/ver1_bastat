@@ -89,7 +89,7 @@ class CompilationController extends BaseController
             $status= !$status;
         $data= $this->repository->change_status($id,$status);
 
-        return back()->with('success','Copoun Status Changed succesfully');
+        return back()->with('success','Status Changed succesfully');
     }
     /*function index(Request $request)
     {

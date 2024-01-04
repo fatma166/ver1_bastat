@@ -151,6 +151,7 @@
                                 <th>عدد المنتجات</th>
                                 <th>المحفظة</th>
                                 <th>الحالة</th>
+                                <th>تمييز</th>
                                 <th style="width: 85px;">الإجراء</th>
                             </tr>
                             </thead>
@@ -175,6 +176,16 @@
                                 <td></td>
                                 <td>
                                     <input type="checkbox"  @if($place->status==1) checked @endif  data-plugin="switchery" value="{{$place->status}}" id="change_place_status" place_id="{{$place->id}}" data-color="#1bb99a" />
+                                </td>
+                                <td>
+                                    <a  href="{{route('admin.place.fav-status',['id'=>$place->id,'status'=>$place->selected_admin])}}">
+                                        @if($place->selected_admin==1)
+                                            <i class="mdi mdi-star" ></i>
+                                        @endif
+                                        @if($place->selected_admin==0)
+                                            <i class="mdi mdi-star-outline" ></i>
+                                        @endif
+                                    </a>
                                 </td>
                                 <td>
                                     <a href="{{route('admin.place.details',['id'=>$place->id])}}" class="action-icon">

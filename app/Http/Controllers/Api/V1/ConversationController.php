@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\CentralLogics\Helpers;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\MessageResource;
 use App\Models\Conversation;
 //use App\Models\DeliveryMan;
 use App\Models\UserInfo;
@@ -35,21 +36,23 @@ class ConversationController extends Controller
             $image_name = null;
         }
 
-        $limit = $request['limit']??10;
+        $limit = $request['limit']??15;
         $offset = $request['offset']??1;
 
         $sender = UserInfo::where('user_id', $request->user()->id)->first();
-        if(!$sender){
-            $sender = new UserInfo();
-            $sender->user_id = $request->user()->id;
-            $sender->f_name = $request->user()->f_name;
-            $sender->l_name = $request->user()->l_name;
-            $sender->phone = $request->user()->phone;
-            $sender->email = $request->user()->email;
-            $sender->image = $request->user()->image;
-            $sender->save();
-        }
+        if($request->has('message')) {
 
+            if (!$sender) {
+                $sender = new UserInfo();
+                $sender->user_id = $request->user()->id;
+                $sender->f_name = $request->user()->f_name;
+                $sender->l_name = $request->user()->l_name;
+                $sender->phone = $request->user()->phone;
+                $sender->email = $request->user()->email;
+                $sender->image = $request->user()->image;
+                $sender->save();
+            }
+        }
         if($request->conversation_id){
             $conversation = Conversation::find($request->conversation_id);
 
@@ -77,81 +80,88 @@ class ConversationController extends Controller
                 $receiver_id = 0;
             }else if($request->receiver_type == 'vendor'){
                 $receiver = UserInfo::where('vendor_id',$request->receiver_id)->first();
-                $vendor = Vendor::find($request->receiver_id);
-                if(!$receiver){
-                    $receiver = new UserInfo();
-                    $receiver->vendor_id = $vendor->id;
-                    $receiver->f_name = $vendor->restaurants[0]->name;
-                    $receiver->l_name = '';
-                    $receiver->phone = $vendor->phone;
-                    $receiver->email = $vendor->email;
-                    $receiver->image = $vendor->restaurants[0]->logo;
-                    $receiver->save();
+                if($request->has('message')) {
+                    $vendor = Vendor::find($request->receiver_id);
+                    if (!$receiver) {
+                        $receiver = new UserInfo();
+                        $receiver->vendor_id = $vendor->id;
+                        $receiver->f_name = $vendor->restaurants[0]->name;
+                        $receiver->l_name = '';
+                        $receiver->phone = $vendor->phone;
+                        $receiver->email = $vendor->email;
+                        $receiver->image = $vendor->restaurants[0]->logo;
+                        $receiver->save();
+                    }
                 }
-
                 $receiver_id = $receiver->id;
-                $fcm_token=$vendor->firebase_token;
+                if($request->has('message')) {
+                    $fcm_token = $vendor->firebase_token;
+                }
 
             }
 
             $conversation = Conversation::WhereConversation($sender->id,$receiver_id)->first();
         }
-
-        if(!$conversation){
-            $conversation = new Conversation;
-            $conversation->sender_id = $sender->id;
-            $conversation->sender_type = 'customer';
-            $conversation->receiver_id = $receiver_id;
-            $conversation->receiver_type = $request->receiver_type;
-            $conversation->unread_message_count = 0;
-            $conversation->last_message_time = Carbon::now()->toDateTimeString();
-            $conversation->save();
-            $conversation= Conversation::find($conversation->id);
-        }
-
-        $message = new Message();
-        $message->conversation_id = $conversation->id;
-        $message->sender_id = $sender->id;
-        $message->message = $request->message;
-        $message->file = $image_name?json_encode($image_name, JSON_UNESCAPED_SLASHES):null;
-        try {
-            if($message->save())
-            $conversation->unread_message_count = $conversation->unread_message_count? $conversation->unread_message_count+1:1;
-            $conversation->last_message_id=$message->id;
-            $conversation->last_message_time = Carbon::now()->toDateTimeString();
-            $conversation->save();
-            {
-                if($request->receiver_type == 'admin' || $receiver_id == 0){
-                    $data = [
-                        'title' =>__('message'),
-                        'description' =>__('message_description'),
-                        'order_id' => '',
-                        'image' => '',
-                        'message' => json_encode($message) ,
-                        'type'=> 'message'
-                    ];
-                    FCMService::send_push_notif_to_topic($data,'admin_message','message');
-                }else if($request->receiver_type == 'vendor' || $request->receiver_type == 'delivery_man'){
-                    $data = [
-                        'title' =>trans('message'),
-                        'description' =>trans('message_description'),
-                        'order_id' => '',
-                        'image' => '',
-                        'message' => json_encode($message) ,
-                        'type'=> 'message',
-                        'conversation_id'=> $conversation->id,
-                        'sender_type'=> 'user'
-                    ];
-                    FCMService::send_push_notif_to_device($fcm_token, $data);
-
-                }
+        if($request->has('message')) {
+            if (!$conversation) {
+                $conversation = new Conversation;
+                $conversation->sender_id = $sender->id;
+                $conversation->sender_type = 'customer';
+                $conversation->receiver_id = $receiver_id;
+                $conversation->receiver_type = $request->receiver_type;
+                $conversation->unread_message_count = 0;
+                $conversation->last_message_time = Carbon::now()->toDateTimeString();
+                $conversation->save();
+                $conversation = Conversation::find($conversation->id);
             }
+        }
+        if($request->has('message')) {
+            $message = new Message();
+            $message->conversation_id = $conversation->id;
+            $message->sender_id = $sender->id;
+            $message->message = $request->message;
+            $message->file = $image_name ? json_encode($image_name, JSON_UNESCAPED_SLASHES) : null;
+            try {
+                if ($message->save())
+                    $conversation->unread_message_count = $conversation->unread_message_count ? $conversation->unread_message_count + 1 : 1;
+                $conversation->last_message_id = $message->id;
+                $conversation->last_message_time = Carbon::now()->toDateTimeString();
+                $conversation->save();
+                {
+                    if ($request->receiver_type == 'admin' || $receiver_id == 0) {
+                        $data = [
+                            'title' => __('message'),
+                            'description' => __('message_description'),
+                            'order_id' => '',
+                            'image' => '',
+                            'message' => json_encode($message),
+                            'type' => 'message'
+                        ];
+                        FCMService::send_push_notif_to_topic($data, 'admin_message', 'message');
+                    } else if ($request->receiver_type == 'vendor' || $request->receiver_type == 'delivery_man') {
+                        $data = [
+                            'title' => trans('message'),
+                            'description' => trans('message_description'),
+                            'order_id' => '',
+                            'image' => '',
+                            'message' => json_encode($message),
+                            'type' => 'message',
+                            'conversation_id' => $conversation->id,
+                            'sender_type' => 'user'
+                        ];
+                        FCMService::send_push_notif_to_device($fcm_token, $data);
 
-        } catch (\Exception $e) {
-            info($e);
+                    }
+                }
+
+            } catch (\Exception $e) {
+                info($e);
+            }
         }
 
-        $messages = Message::where(['conversation_id' => $conversation->id])->latest()->paginate($limit, ['*'], 'page', $offset);
+        $messages = Message::with('sender')->where(['conversation_id' => $conversation->id])->latest()->paginate($limit, ['*'], 'page', $offset);
+
+        $messages=MessageResource::collection($messages);
 
         $conv = Conversation::with('sender','receiver','last_message')->find($conversation->id);
 

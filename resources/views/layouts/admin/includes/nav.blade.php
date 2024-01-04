@@ -5,12 +5,12 @@
             <!-- Topbar Brand Logo -->
             <div class="logo-box">
                 <!-- Brand Logo Light -->
-                <a href="index.html" class="logo-light">
+                <a href="{{route('admin.dashboard')}}" class="logo-light">
                     <img src="{{asset('assets/images/logo-light.png')}}" alt="logo" class="logo-lg">
                     <img src="{{asset('assets/images/logo-sm.png')}}" alt="small logo" class="logo-sm">
                 </a>
                 <!-- Brand Logo Dark -->
-                <a href="index.html" class="logo-dark">
+                <a  href="{{route('admin.dashboard')}}" class="logo-dark">
                     <img src="{{asset('assets/images/logo-dark.png')}}" alt="dark logo" class="logo-lg">
                     <img src="{{asset('assets/images/logo-sm.png')}}" alt="small logo" class="logo-sm">
                 </a>
@@ -64,7 +64,7 @@
             </li>
             <!-- Notofication dropdown -->
             <li class="dropdown notification-list">
-                <a class="nav-link dropdown-toggle waves-effect waves-light arrow-none" href="./apps-chat.html" role="button" aria-haspopup="false" aria-expanded="false">
+                <a class="nav-link dropdown-toggle waves-effect waves-light arrow-none" href="{{ route('admin.message.list') }}" role="button" aria-haspopup="false" aria-expanded="false">
                     <i class="dripicons-message font-22 cart-icon"></i>
                 </a>
             </li>
@@ -82,13 +82,13 @@
             <!-- customer Dropdown -->
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    <img src="{{isset(auth("admin")->user()->image)?asset(auth("admin")->user()->image):''}}" alt="user-image" class="rounded-circle" onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                    <img src="{{isset(auth("admin")->user()->image)?asset(auth("admin")->user()->image):''}}" alt="user-image" class="rounded-circle" onerror="this.src='{{asset('assets/images/avatar.svg')}}'">
                     <span class="ms-1 d-none d-md-inline-block"> {{isset(auth("admin")->user()->f_name)?auth("admin")->user()->f_name:''}}  {{isset(auth("admin")->user()->l_name)?auth("admin")->user()->l_name:''}}<i class="mdi mdi-chevron-down"></i>
                   </span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
                     <!-- item-->
-                    <a href="./add-admin.html" class="dropdown-item notify-item">
+                    <a href="{{route('admin.employee.edit',['id'=>1])}}"class="dropdown-item notify-item">
                         <i class="fe-settings"></i>
                         <span>الإعدادات</span>
                     </a>

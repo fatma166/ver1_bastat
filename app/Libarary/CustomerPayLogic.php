@@ -12,6 +12,7 @@ class CustomerPayLogic{
     public static function create_wallet_transaction($user_id, float $amount, $transaction_type, $referance)
     {
         //if(BusinessSetting::where('key','wallet_status')->first()->value != 1) return false;
+
         $user = User::find($user_id);
         $current_balance = $user->wallet_balance;
 

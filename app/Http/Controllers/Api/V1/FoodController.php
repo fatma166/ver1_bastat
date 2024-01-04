@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\FoodRequest;
 use App\Http\Requests\Api\SingleFoodRequest;
+use App\Http\Resources\Api\SingleFoodResource;
 use App\Modules\Core\HTTPResponseCodes;
 use App\Repositories\Api\FoodRepository;
 use App\Traits\LocationTrait;
@@ -52,15 +53,16 @@ class FoodController extends Controller
         $food_id=$request->food_id;
         $related_limit=$request->related_limit?? 2;
 
-        try {
+       try {
 
         $food=new FoodRepository();
        $food= $food->single_food($food_id,$related_limit);
+
             return response()->json([
                 'status' => HTTPResponseCodes::Sucess['status'],
                 'message'=>HTTPResponseCodes::Sucess['message'],
                 'errors' => [],
-                'data' => $food,
+                'data' => new  SingleFoodResource($food),
                 'code'=>HTTPResponseCodes::Sucess['code']
             ],HTTPResponseCodes::Sucess['code']);
 

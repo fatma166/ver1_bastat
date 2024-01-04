@@ -13,6 +13,7 @@ interface  RestaurantInterface
     public function get_latest($zone_ids,$filter_data,$limit,$location);
     public function get_user_fav_restaurant($request);
     public function add_fav_restaurant($request);
+    public function get_selected_restaurant($request);
 
 
 

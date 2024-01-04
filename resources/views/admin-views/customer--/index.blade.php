@@ -164,7 +164,7 @@
                                     </div>
                                 </td>
                                 <td class="table-user">
-                                    <img src="{{asset($place->image)}}" alt="table-user" class="me-2 rounded-circle"   onerror="this.src='{{asset('assets/images/logo.png')}}'" >
+                                    <img src="{{asset($place->image)}}" alt="table-user" class="me-2 rounded-circle"   onerror="this.src='{{asset('assets/images/avatar.svg')}}'" >
                                     <a href="javascript:void(0);" class="text-body fw-semibold">{{$place->name}}</a>
                                 </td>
                                 <td>@if(($place->vendor)!=null){{$place->vendor->f_name}}  {{$place->vendor->l_name}}@endif</td>

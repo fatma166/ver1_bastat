@@ -1,14 +1,18 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminEmployeeController;
+use App\Http\Controllers\Admin\AdminRoleEmployeeController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CompilationController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PlaceController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\CustomerController;
 
 use App\Http\Controllers\Admin\UserWalletController;
+use App\Http\Controllers\Admin\ZoneController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -36,7 +40,18 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
           })->name('admin.index');*/
         //dashboard
         // Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+        Route::group(['prefix' => 'notification', 'as' => 'notification.'], function () {
+            Route::get('/', [NotificationController::class, 'index'])->name('index');
+            Route::get('create', [NotificationController::class, 'create'])->name('create');
+            Route::post('store', 'NotificationController@store')->name('store');
+            Route::get('edit/{notification}', 'NotificationController@edit')->name('edit');
+            Route::post('update/{notification}', 'NotificationController@update')->name('update');
+            Route::get('status/{id}/{status}', 'NotificationController@status')->name('status');
+            Route::post('change_status', 'NotificationController@change_status')->name('change-status');
+            Route::delete('delete/{notification}', 'NotificationController@destroy')->name('delete');
+            Route::post('search', 'NotificationController@search')->name('search');
 
+        });
         Route::group(['prefix' => 'banner', 'as' => 'banner.'], function () {
 
             Route::get('/', [BannerController::class, 'index'])->name('index');
@@ -87,6 +102,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
             Route::get('status/{id}/{status}', 'PlaceController@status')->name('status');
             Route::delete('delete/{id}', 'PlaceController@destroy')->name('delete');
             Route::post('search', 'PlaceController@search')->name('search');
+            Route::get('fav_status/{id}/{status}', 'PlaceController@fav_status')->name('fav-status');
         });
         Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
 
@@ -135,7 +151,54 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
             Route::post('store/{user_id}', 'ConversationController@store')->name('store');
             Route::get('view/{conversation_id}/{user_id}', 'ConversationController@view')->name('view');
         });
+        // message
+        Route::group(['prefix' => 'withdraw', 'as' => 'withdraw.'], function () {
+            Route::get('list', 'WithdrawRequestController@index')->name('list');
+            Route::post('change_status', 'WithdrawRequestController@change_status')->name('change-status');
+        });
+        Route::group(['prefix' => 'role', 'as' => 'role.'], function () {
 
+            Route::get('/', [AdminRoleEmployeeController::class, 'index'])->name('index');
+            Route::get('create', [AdminRoleEmployeeController::class, 'create'])->name('create');
+            Route::post('store', 'AdminRoleEmployeeController@store')->name('store');
+            Route::get('edit/{id}', 'AdminRoleEmployeeController@edit')->name('edit');
+            Route::get('details/{id}', 'AdminRoleEmployeeController@details')->name('details');
+            Route::post('update/{id}', 'AdminRoleEmployeeController@update')->name('update');
+            Route::post('change_status', 'AdminRoleEmployeeController@change_status')->name('change-status');
+            Route::get('status/{id}/{status}', 'AdminRoleEmployeeController@status')->name('status');
+            Route::delete('delete/{id}', 'AdminRoleEmployeeController@destroy')->name('delete');
+            Route::post('search', 'AdminRoleEmployeeController@search')->name('search');
+        });
+
+        Route::group(['prefix' => 'employee', 'as' => 'employee.'], function () {
+
+            Route::get('/', [AdminEmployeeController::class, 'index'])->name('index');
+            Route::get('create', [AdminEmployeeController::class, 'create'])->name('create');
+            Route::post('store', 'AdminEmployeeController@store')->name('store');
+            Route::get('edit/{id}', 'AdminEmployeeController@edit')->name('edit');
+            Route::get('details/{id}', 'AdminEmployeeController@details')->name('details');
+            Route::post('update/{id}', 'AdminEmployeeController@update')->name('update');
+            Route::post('change_status', 'AdminEmployeeController@change_status')->name('change-status');
+            Route::get('status/{id}/{status}', 'AdminEmployeeController@status')->name('status');
+            Route::delete('delete/{id}', 'AdminEmployeeController@destroy')->name('delete');
+            Route::post('search', 'AdminEmployeeController@search')->name('search');
+        });
+
+
+            Route::group(['prefix' => 'zone', 'as' => 'zone.'], function () {
+            Route::get('/',[ZoneController::class,'index'])->name('index');
+            Route::get('create', [ZoneController::class, 'create'])->name('create');
+            Route::post('store', 'ZoneController@store')->name('store');
+            Route::get('edit/{id}', 'ZoneController@edit')->name('edit');
+            Route::post('update/{id}', 'ZoneController@update')->name('update');
+            Route::delete('delete/{id}', 'ZoneController@destroy')->name('delete');
+            Route::post('change_status', 'ZoneController@change_status')->name('change-status');
+            Route::post('search', 'ZoneController@search')->name('search');
+            Route::get('zone-filter/{id}', 'ZoneController@zone_filter')->name('zonefilter');
+            Route::get('get-all-zone-cordinates/{id?}', 'ZoneController@get_all_zone_cordinates')->name('zoneCoordinates');
+            //Route::post('export-zone-cordinates', 'ZoneController@export_zones')->name('export-zones');
+            Route::get('export-zone-cordinates/{type}', 'ZoneController@export_zones')->name('export-zones');
+        });
     });
 });
 

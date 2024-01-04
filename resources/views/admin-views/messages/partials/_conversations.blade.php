@@ -3,7 +3,7 @@
             <div class="row justify-content-between py-1">
                 <div class="col-sm-7">
                     <div class="d-flex align-items-start">
-                        <img src="{{asset($user['image'])}}" class="me-2 rounded-circle" height="36" onerror="this.src='{{asset('assets/images/logo.png')}}'"
+                        <img src="{{asset($user['image'])}}" class="me-2 rounded-circle" height="36" onerror="this.src='{{asset('assets/images/avatar.svg')}}'"
                              alt="Image Description">
                         <div>
                             <h5 class="mt-0 mb-0 font-15">
@@ -24,7 +24,7 @@
 
             <li class="clearfix @if($con->sender_id != $receiver->id)odd @endif">
                 <div class="chat-avatar">
-                    <img src="{{asset($user->avatar)}}" class="rounded" onerror="this.src='{{asset('assets/images/logo.png')}}'"/>
+                    <img src="{{asset($user->avatar)}}" class="rounded" onerror="this.src='{{asset('assets/images/avatar.svg')}}'"/>
                     <i>
                        <span> @if(date('d M Y',strtotime($con->created_at))==date('d M Y')) {{date('H:i',strtotime($con->created_at))}} @elseif(date('Y',strtotime($con->created_at))!= date('Y')) {{date('d M Y',strtotime($con->created_at))}} {{date('H:i',strtotime($con->created_at))}}
                         @else {{date('d M',strtotime($con->created_at))}} {{date('H:i',strtotime($con->created_at))}}@endif</span>
@@ -38,7 +38,7 @@
                         @if($con->file!=null)
                             @foreach(json_decode($con->file) as $img)
                                 <br>
-                                    <img class="w-100" src="{{asset($img)}}"   onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                                    <img class="w-100" src="{{asset($img)}}"   onerror="this.src='{{asset('assets/images/avatar.svg')}}'">
                             @endforeach
                         @endif
                         </p>

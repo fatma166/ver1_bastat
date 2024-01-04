@@ -5,7 +5,10 @@ use App\Models\Coupon;
 use App\Models\Food;
 use App\Models\Order;
 use App\Models\Restaurant;
+use App\Services\FCMService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 class Helper
 {
     public static function restaurant_data_formatting($data, $multi_data = false)
@@ -14,6 +17,14 @@ class Helper
         $storage = [];
         if ($multi_data == true) {
             foreach ($data as $item) {
+
+               /* if(isset($item->fav)&&($item->fav!="" ||$item->fav!= null)){
+                    $data['fav']=1;
+                }else{
+
+                    $data['fav']=0;
+                }*/
+
                 if ($item->opening_time) {
                     $item['available_time_starts'] = $item->opening_time->format('H:i');
                     unset($item['opening_time']);
@@ -328,9 +339,13 @@ class Helper
         }*/
         if ($coupon != null) {
             $product_price=0;
-            $cart_items=json_decode($cart_items, true);
+          //  $cart_items=$cart_items;
+           // print_r($cart_items); exit;
             foreach ($cart_items as $key => $value) {
                 $food = food::where('id', $value['food_id'])->first();
+                if(empty($food)){
+                    return 400;
+                }
                 $product_price +=   $food ['price']* $value['quantity'];
             }
 
@@ -498,5 +513,96 @@ class Helper
         }
         return 0;
     }
+
+    public static function module_permission_check($module_name)
+    {
+        if (!auth('admin')->user()->role) {
+            return false;
+        }
+
+
+        $permission = auth('admin')->user()->role->modules;
+        if (isset($permission) && in_array($module_name, (array)json_decode($permission)) == true) {
+            return true;
+        }
+        if (auth('admin')->user()->role_id == 1) {
+            return true;
+        }
+        return false;
+    }
+    public static function format_coordiantes($coordinates)
+    {
+        // print_r($coordinates); exit;
+        $data = [];
+        foreach ($coordinates as $coord) {
+            $data[] = (object)['lat' => $coord->getlat(), 'lng' => $coord->getlng()];
+        }
+        return $data;
+    }
+
+
+    public static function product_discount_calculate($product, $price, $restaurant_discount)
+    {
+      //  $restaurant_discount = self::get_restaurant_discount($restaurant);
+        if (isset($restaurant_discount)) {
+            $price_discount = ($price / 100) * $restaurant_discount['discount'];
+        } else if ($product['discount_type'] == 'percent') {
+            $price_discount = ($price / 100) * $product['discount'];
+        } else {
+            $price_discount = $product['discount'];
+        }
+        return $price_discount;
+    }
+
+    public static function send_order_notification($order)
+    {
+
+        try {
+
+            $status =$order->order_status;
+            $value = __($status);
+            if ($value) {
+                $data = [
+                    'title' => __('order status'),
+                    'description' => $value,
+                    'order_id' => $order->id,
+                    'image' => '',
+                    'type' => 'order_status',
+                ];
+                FCMService::send_push_notif_to_device($order->customer->cm_firebase_token, $data);
+                DB::table('user_notifications')->insert([
+                    'data' => json_encode($data),
+                    'user_id' => $order->user_id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+
+            if (!$order->scheduled && (($order->order_type == 'take_away' && $order->order_status == 'pending') || ($order->payment_method != 'cash_on_delivery' && $order->order_status == 'confirmed'))) {
+                $data = [
+                    'title' => trans('order_push_title'),
+                    'description' => trans('new_order_push_description'),
+                    'order_id' => $order->id,
+                    'image' => '',
+                    'type' => 'new_order',
+                ];
+                FCMService::send_push_notif_to_device($order->restaurant->vendor->firebase_token, $data);
+                DB::table('user_notifications')->insert([
+                    'data' => json_encode($data),
+                    'vendor_id' => $order->restaurant->vendor_id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+
+
+            return true;
+        } catch (\Exception $e) {
+            info($e);
+        }
+        return false;
+    }
+
+
 
 }

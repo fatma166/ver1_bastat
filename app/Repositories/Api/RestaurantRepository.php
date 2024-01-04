@@ -22,7 +22,7 @@ class RestaurantRepository implements RestaurantInterface
         // TODO: Implement get_restaurant() method.
 
       //  DB::enableQueryLog();
-        $paginator = Restaurant::
+        $paginator = Restaurant::with('fav')->
             withOpen()
            // ->whereIn('zone_id', $zone_ids)
             ->Active();
@@ -198,9 +198,25 @@ class RestaurantRepository implements RestaurantInterface
 
             return true;
         }else{
-
+            FavRestaurant::where(['user_id' => $user_id, 'restaurant_id' => $restaurant_id])->delete();
             return false;
         }
+    }
+    public function get_selected_restaurant($request)
+    {
+        // TODO: Implement get_user_fav_restaurant() method.
+        $limit=$request->limit?$request->limit:6;
+        $offset=$request->offset?$request->offset:0;
+
+        $data= Restaurant::withOpen()->where('selected_admin',1)->orderBy('id','asc') ->paginate($limit, ['*'], 'page', $offset);
+        $result=[];
+        foreach($data as $dt){
+           // print_r($dt); exit;
+            $result1=Helper::restaurant_data_formatting($dt, false);
+            $result[]= new PopularRestaurantResource($result1);
+        }
+        return $result;
+        // return PopularRestaurantResource::collection($data);
     }
 
 

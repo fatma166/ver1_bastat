@@ -3,7 +3,7 @@
             <div class="row justify-content-between py-1">
                 <div class="col-sm-7">
                     <div class="d-flex align-items-start">
-                        <img src="{{asset($user['image'])}}" class="me-2 rounded-circle" height="36" onerror="this.src='{{asset('assets/images/logo.png')}}'"
+                        <img src="{{asset($user['image'])}}" class="me-2 rounded-circle" height="36" onerror="this.src='{{asset('assets/images/avatar.svg')}}'"
                              alt="Image Description">
                         <div>
                             <h5 class="mt-0 mb-0 font-15">

@@ -18,6 +18,7 @@ class RestaurantController extends Controller
     use LocationTrait;
     public function list_rest(LatestRestaurantRequest $request, $filter_data="all")
     {
+
        $limit= $request->limit;
        $offset=$request->offset;
         if($request->filled('type'))
@@ -177,17 +178,29 @@ class RestaurantController extends Controller
         $return1= $rest->add_fav_restaurant($request);
         if($return1==false){
             return response()->json([
-                'status' =>false,
-                'errors'=>__('added_before'),
-                'message' =>__('added_before'),
-                'code'=>HTTPResponseCodes::BadRequest['code']
+                'status' => HTTPResponseCodes::Sucess['status'],
+                'errors'=>__('delete from_fav'),
+                'message' =>__('delete from_fav'),
+                'code'=>HTTPResponseCodes::Sucess['code']
             ],HTTPResponseCodes::Sucess['code']);
         }
         return response()->json([
             'status' => HTTPResponseCodes::Sucess['status'],
-            'message'=>HTTPResponseCodes::Sucess['message'],
+            'message'=>__('add to_fav'),
             'errors' => [],
             'data' => [],
+            'code'=>HTTPResponseCodes::Sucess['code']
+        ],HTTPResponseCodes::Sucess['code']);
+    }
+    public function get_selected_restaurant(Request $request){
+
+        $rest=new RestaurantRepository();
+        $restaurants = $rest->get_selected_restaurant($request);
+        return response()->json([
+            'status' => HTTPResponseCodes::Sucess['status'],
+            'message'=>HTTPResponseCodes::Sucess['message'],
+            'errors' => [],
+            'data' => $restaurants,
             'code'=>HTTPResponseCodes::Sucess['code']
         ],HTTPResponseCodes::Sucess['code']);
     }

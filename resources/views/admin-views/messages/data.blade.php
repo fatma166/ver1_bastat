@@ -18,7 +18,7 @@
                 <div class="d-flex align-items-start p-2">
                     <img class="me-2 rounded-circle"
                          src="{{asset($user['image'])}}"
-                            onerror="this.src='{{asset('assets/images/logo.png')}}'"
+                            onerror="this.src='{{asset('assets/images/avatar.svg')}}'"
                             alt="Image Description" style="width: 42px; height: 42px;"/>
 
                 <div class="w-100">
@@ -43,7 +43,7 @@
                 class="chat-user-info d-flex border-bottom p-3 align-items-center customer-list">
                 <div class="chat-user-info-img d-none d-md-block">
                     <img class="avatar-img"
-                            src='{{asset('assets/images/logo.png')}}'
+                            src='{{asset('assets/images/avatar.svg')}}'
                             alt="Image Description">
                 </div>
                 <div class="chat-user-info-content">

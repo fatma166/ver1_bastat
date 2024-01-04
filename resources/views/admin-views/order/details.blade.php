@@ -91,7 +91,7 @@
                                 </td>
                                 <td>{{$detail->quantity}}</td>
                                 <td>{{$detail->price}}</td>
-                                <td>{{$detail->quantity*$detail->price*$order->restaurant->delivery_charge}}</td>
+                                <td>{{$detail->quantity*$detail->price}}</td>
                             </tr>
                             @endforeach
 

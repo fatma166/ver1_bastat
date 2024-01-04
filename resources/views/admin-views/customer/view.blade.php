@@ -26,7 +26,7 @@
         <div class="col-lg-4 col-xl-4">
             <div class="card text-center">
                 <div class="card-body">
-                    <img src="{{asset($user->image)}}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                    <img src="{{asset($user->image)}}" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image" onerror="this.src='{{asset('assets/images/avatar.svg')}}'">
                     <h4 class="mb-0">{{$user->f_name}}   {{$user->l_name}}</h4>
                     <button type="button" class="btn btn-primary btn-xs waves-effect mb-2 waves-light">ارسال رسالة</button>
                     <div class="text-start mt-3">

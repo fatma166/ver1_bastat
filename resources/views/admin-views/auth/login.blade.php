@@ -52,6 +52,7 @@
                                             </span>
                                         </a> -->
                                     </div>
+                                    <img style="width: 10rem;" src="{{asset('assets/images/logo-dark.png')}}" alt="logo" class="logo-lg">
                                     <h1 class="mb-3">تسجيل الدخول</h1>
                                 </div>
 

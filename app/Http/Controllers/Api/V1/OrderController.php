@@ -124,7 +124,7 @@ class OrderController extends Controller
                 'data' => [],
                 'code'=>HTTPResponseCodes::BadRequest['code']
             ],HTTPResponseCodes::Sucess['code']);
-        $staus=  Helper::is_valide($coupon, $user_id, $restaurant_id,$cart_items);
+        $staus=Helper::is_valide($coupon, $user_id, $restaurant_id,$cart_items);
         if($staus==407)
         {
             return response()->json([
@@ -146,6 +146,16 @@ class OrderController extends Controller
                 'code'=>406
             ],HTTPResponseCodes::Sucess['code']);
 
+        }
+
+        else if($staus==400){
+            return response()->json([
+                'status' => false,
+                'errors' => __(' food_id not found iin data base') . $coupon['min_purchase'],
+                'message' => __('please select correct food_id') ,
+                'data' => [],
+                'code' => 407
+            ], HTTPResponseCodes::Sucess['code']);
         }
 
         else if($staus==200)
@@ -234,7 +244,7 @@ class OrderController extends Controller
 
        //  try {
              $pervious_add=new OrderRepository();
-             $address=$pervious_add->get_pervious_address($user_id);
+             $address=$pervious_add->get_pervious_address($request);
              return response()->json([
                  'status' => HTTPResponseCodes::Sucess['status'],
                  'message'=>HTTPResponseCodes::Sucess['message'],

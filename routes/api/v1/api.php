@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\BannerController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CompilationController;
 use App\Http\Controllers\Api\V1\FoodController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\OrderController;
 use App\Http\Controllers\Api\V1\PaymentController;
 use App\Http\Controllers\Api\V1\RestaurantController;
@@ -79,13 +80,16 @@ Route::namespace('Api\V1')->prefix('restaurants')->group (function() {
 
 
     Route::get('/list', [RestaurantController::class, 'list_rest'])->name('restaurants')->withoutMiddleware('auth_api');
-    Route::get('/popular', [RestaurantController::class, 'get_popular_restaurants'])->name('popular-restaurants') ->withoutMiddleware('auth_api');;
+
+    Route::get('/popular', [RestaurantController::class, 'get_popular_restaurants'])->name('popular-restaurants') ->withoutMiddleware('auth_api');
     Route::get('/details/{id}', [RestaurantController::class, 'get_details'])->name('details-restaurants')->withoutMiddleware('auth_api');;
     Route::get('/latest', [RestaurantController::class, 'get_latest'])->name('latest-restaurants')->withoutMiddleware('auth_api');
+    Route::get('/get-selected-restaurant', [RestaurantController::class, 'get_selected_restaurant'])->name('get_selected_restaurant')->withoutMiddleware('auth_api');
     Route::group(['middleware'=>['auth_api:api']], function () {
 
-        Route::get('/get-user-fav-restaurant', [RestaurantController::class, 'get_user_fav_restaurant'])->name('get_user_fav_restaurant');
-        Route::post('/add-fav-restaurant', [RestaurantController::class, 'add_fav_restaurant'])->name('add_fav_restaurant');
+    Route::get('/get-user-fav-restaurant', [RestaurantController::class, 'get_user_fav_restaurant'])->name('get_user_fav_restaurant');
+    Route::post('/add-fav-restaurant', [RestaurantController::class, 'add_fav_restaurant'])->name('add_fav_restaurant');
+
     });
 });
 
@@ -148,6 +152,9 @@ Route::namespace('Api\V1')->prefix('user')->group (function() {
         Route::post('/update-address',[UserController::class,'update_address'])->name('update-address');
         Route::post('/delete-address',[UserController::class,'delete_address'])->name('delete_address');
         Route::get('/info',[UserController::class,'info'])->name('user-info');
+        Route::post('/edit-profile', [UserController::class,'edit_profile'])->name('edit-profile');
+        Route::get('notifications', [NotificationController::class,'get_notifications'])->name('notifications');
+
     });
     });
 

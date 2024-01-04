@@ -63,7 +63,7 @@
                                     </div>
                                 </td>
                                 <td class="table-user">
-                                    <img src="{{asset($product->image)}}" alt="table-user" class="me-2 rounded-circle" onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                                    <img src="{{asset($product->image)}}" alt="table-user" class="me-2 rounded-circle" onerror="this.src='{{asset('assets/images/avatar.svg')}}'">
                                     <a href="javascript:void(0);" class="text-body fw-semibold">{{$product->name}}</a>
                                 </td>
                                 <td> {{$product->category}}</td>

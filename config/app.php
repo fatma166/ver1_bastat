@@ -6,6 +6,7 @@ return [
 'default_pagination'=>10,
 'allow_distance'=>10,
 'currency'=>'SAR',
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

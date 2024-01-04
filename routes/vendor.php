@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Vendor\VendorEmployeeController;
 use App\Http\Controllers\Vendor\CategoryController;
 use App\Http\Controllers\Vendor\OrderController;
 use App\Http\Controllers\Vendor\ProductController;
@@ -87,6 +88,21 @@ Route::group(['namespace' => 'App\Http\Controllers\Vendor', 'as' => 'vendor.'], 
             Route::get('list', 'ConversationController@list_index')->name('list');
             Route::post('store/{user_id}/{user_type}', 'ConversationController@store')->name('store');
             Route::get('view/{conversation_id}/{user_id}', 'ConversationController@view')->name('view');
+        });
+
+
+        Route::group(['prefix' => 'employee', 'as' => 'employee.'], function () {
+
+            Route::get('/', [VendorEmployeeController::class, 'index'])->name('index');
+            Route::get('create', [VendorEmployeeController::class, 'create'])->name('create');
+            Route::post('store', 'VendorEmployeeController@store')->name('store');
+            Route::get('edit/{id}', 'VendorEmployeeController@edit')->name('edit');
+            Route::get('details/{id}', 'VendorEmployeeController@details')->name('details');
+            Route::post('update/{id}', 'VendorEmployeeController@update')->name('update');
+            Route::post('change_status', 'VendorEmployeeController@change_status')->name('change-status');
+            Route::get('status/{id}/{status}', 'VendorEmployeeController@status')->name('status');
+            Route::delete('delete/{id}', 'VendorEmployeeController@destroy')->name('delete');
+            Route::post('search', 'VendorEmployeeController@search')->name('search');
         });
     });
 

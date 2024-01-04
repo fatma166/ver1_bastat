@@ -16,6 +16,7 @@ use App\Models\OrderDetail;
 use App\Models\Restaurant;
 use App\Modules\Core\Helper;
 use App\Modules\Core\HTTPResponseCodes;
+use App\Services\FCMService;
 use http\Env\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -27,7 +28,7 @@ class OrderRepository implements OrderInterface
 
     public  function calcualate_order_amount($request){
         $product_price=0;
-        $cart_items=json_decode($request['cart_items'], true);
+        $cart_items=$request['cart_items'];
         foreach ($cart_items as $key => $value) {
             $product_price +=  $value['price']* $value['quantity'];
         }
@@ -52,9 +53,9 @@ class OrderRepository implements OrderInterface
         $coupon_discount_amount =isset( $coupon) ? Helper::get_discount($coupon, $product_price) : 0;
 
         $total_price = $product_price- $coupon_discount_amount ;
-        $tax = $restaurant->tax;
+        $tax = 0;//$restaurant->tax;
         $total_tax_amount= ($tax > 0)?(($total_price * $tax)/100):0;
-        $shipping_coast=$restaurant->shipping_coast;
+        $shipping_coast=$restaurant->delivery_charge;
 
         if(($restaurant['minimum_order']) > $product_price )
         {
@@ -73,27 +74,31 @@ class OrderRepository implements OrderInterface
             $coupon->increment('total_uses');
         }
         $order_amount = round($total_price + $total_tax_amount + $shipping_coast,2 );//config('round_up_to_digit')
-        $data=['status'=>'true','order_amount'=>$order_amount,'total_price'=>$total_price,'coupon_discount_amount'=>$coupon_discount_amount,'tax'=>$tax];
+        $data=['status'=>'true','order_amount'=>$order_amount,'total_price'=>$total_price,'coupon_discount_amount'=>$coupon_discount_amount,'tax'=>$tax,'shipping_coast'=>$shipping_coast,'product_price'=>$product_price];
 
         return($data);
 
 
     }
-    public function payment_success()
+    public function payment_success($data)
     {
         //   echo   Session::get('order_id'); exit;
 
-        $order = Order::find(Session::get('order_id'));
-
+        $order_id= $data['client_reference_id'];
+        $order=Order::find($order_id);
+        if(!$order){
+            return false;
+        }
         $order->order_status='confirmed';
         $order->payment_method='stripe';
-        $order->transaction_reference=Session::get('transaction_id');
+        $order->transaction_reference=$data['payment_intent'];
         $order->payment_status='paid';
         $order->confirmed=now();
         $order->save();
         try {
-            //  Helper::send_order_notification($order);
+             FCMService::send_order_notification($order);
         } catch (\Exception $e) {
+            return false;
 
         }
         return true;
@@ -221,7 +226,7 @@ class OrderRepository implements OrderInterface
         {
             $shipping_coast=0;
         }else{
-            $shipping_coast=$restaurant->shipping_coast;
+            $shipping_coast=$restaurant->delivery_charge;
         }
         if(isset($request['address']))
         {
@@ -231,8 +236,11 @@ class OrderRepository implements OrderInterface
             $address_data['user_id']= $user_id;//array('user_id'=>$user_id,'contact_person_number'=>'ahmed','address'=>'tiyleklj','contact_person_name'=>'contact_person_name','floor'=>'floor','road','house'=>'house');
 
 
-
-            $order_address=CustomerAddress::insert((array)$address_data);
+            $order_address= new CustomerAddress();
+            $order_address->fill((array)$address_data);
+            $order_address->save();
+         //   $order_address=CustomerAddress::insert();
+            $order_address=$order_address['id'];
 
 
         } else
@@ -259,7 +267,7 @@ class OrderRepository implements OrderInterface
         try {
             $order = new Order();
             $order->user_id = Auth::guard('api')->user()->id;
-            $order->order_amount = $request['order_amount'];
+
             $order->coupon_discount_amount = $coupon_discount_amount;
             if (isset($request['address'])) {
                 $order->delivery_address_id = $order_address;
@@ -282,14 +290,22 @@ class OrderRepository implements OrderInterface
             //cart_items= (array) $request->cart_items;//array('food_id' => 1, 'quantity' => 2, 'price' => 80));
             $product_price=0;
             $cart_items=$request['cart_items'];
-            foreach ($cart_items as $key => $value) {
+
+           $data_cal=self::calcualate_order_amount($request);
+
+           /* foreach ($cart_items as $key => $value) {
                 $product_price +=  $value['price']* $value['quantity'];
             }
             $coupon_discount_amount = $coupon ? Helper::get_discount($coupon, $product_price) : 0;
             $total_price = $product_price- $coupon_discount_amount ;
             $tax = $restaurant->tax;
             $total_tax_amount= ($tax > 0)?(($total_price * $tax)/100):0;
-
+             */
+            $coupon_discount_amount=$data_cal['coupon_discount_amount'];
+            $product_price=$data_cal['product_price'];
+            $tax=$data_cal['tax'];
+            $total_price = $product_price- $coupon_discount_amount ;
+            $total_tax_amount= ($tax > 0)?(($total_price * $tax)/100):0;
             if($restaurant->minimum_order > $product_price )
             {
                 return response()->json([
@@ -304,7 +320,7 @@ class OrderRepository implements OrderInterface
             {
                 $coupon->increment('total_uses');
             }
-            $order_amount = round($total_price + $total_tax_amount + $shipping_coast,2 );//config('round_up_to_digit')
+            $order_amount = $data_cal['order_amount'];//round($total_price + $total_tax_amount + $shipping_coast,2 );//config('round_up_to_digit')
 
             if($request->payment_method == 'wallet' && $request->user()->wallet_balance < $order_amount)
             {
@@ -386,12 +402,17 @@ class OrderRepository implements OrderInterface
     }
 
 
-    public function get_pervious_address($user_id)
+    public function get_pervious_address($request)
     {
         // TODO: Implement get_pervious_address() method.
 
         // return
-        $adds= CustomerAddress::where('user_id',$user_id)->get();
+
+        $offset=$request->offset??0;
+        $limit=$request->limit??3;
+        $user_id=Auth::guard('api')->user()->id;
+
+        $adds= CustomerAddress::where('user_id',$user_id)->orderby('id','desc')->paginate($limit, ['*'], 'page', $offset);
         return AddressResource::collection($adds);
     }
     public function get_address($user_id,$address_id)
@@ -407,10 +428,10 @@ class OrderRepository implements OrderInterface
     {
         // TODO: Implement track_order() method.
         // DB::enableQueryLog();
-        $order = Order::with(['restaurant'])->withCount('details')->where(['id' => $order_id, 'user_id' => $user_id])->first();
+        $order = Order::with(['restaurant','customer_address'])->withCount('details')->where(['id' => $order_id, 'user_id' => $user_id])->first();
 
         // $query= DB::getQueryLog();
-        //print_R($orderc); exit;
+       // dd($order); exit;
         if ($order) {
             return  new TrackOrderResource($order);
             //  $order['restaurant'] = $order['restaurant'] ? Helper::restaurant_data_formatting($order['restaurant']) : $order['restaurant'];
@@ -429,7 +450,7 @@ class OrderRepository implements OrderInterface
         //DB::enableQueryLog();
         $order = Order::with(['restaurant'])->where (function ($query) use($request){
             if($request->has('current_order')&& ($request->current_order==1)){
-                $query->whereIn('order_status',array('pending','processing','picked_up'));
+                $query->whereIn('order_status',array('pending','processing','picked_up','confirmed'));
             }elseif ($request->has('latest_order')){
                 $query->where('order_status',array('delivered'));
             }else{

@@ -78,6 +78,7 @@
 
 @endsection
 @section('script')
+
     <script>
 
         /* logo*/

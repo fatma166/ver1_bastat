@@ -44,188 +44,211 @@
                     <span class="menu-text"> الرئيسية</span>
                 </a>
             </li>
-            <li class="menu-title"> العروض الترويجية</li>
-            <li class="menu-item">
-                <a href="notofications-list.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="bell"></i>
-                </span>
-                    <span class="menu-text"> إرسال إشعارات</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{route('admin.banner.index')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="target"></i>
-                </span>
-                    <span class="menu-text"> إنشاء إعلانات</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{route('admin.coupon.index')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="percent"></i>
-                </span>
-                    <span class="menu-text"> كوبونات التخفيض</span>
-                </a>
-            </li>
-            <li class="menu-title"> إدارة أصحاب المحلات</li>
-            <li class="menu-item">
-                <a href="{{route('admin.place.index')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="briefcase"></i>
-                </span>
-                    <span class="menu-text"> أصحاب المحلات</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{route('admin.place.create')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="folder-plus"></i>
-                </span>
-                    <span class="menu-text"> إضافة صاحب محل</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{route('admin.compilation.index')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="grid"></i>
-                </span>
-                    <span class="menu-text"> التصنيفات</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{route('admin.compilation.create')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="target"></i>
-                </span>
-                    <span class="menu-text"> إضافة تصنيف</span>
-                </a>
-            </li>
-            <li class="menu-title">إدارة العملاء</li>
-            <li class="menu-item">
-                <a href="{{route('admin.order.index')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="shopping-bag"></i>
-                </span>
-                    <span class="menu-text"> الطلبات</span>
-                    <span class="badge bg-success rounded-pill ms-auto">4</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{route('admin.customer.index')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="users"></i>
-                </span>
-                    <span class="menu-text"> العملاء</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="refund-orders.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="gift"></i>
-                </span>
-                    <a href="{{route('admin.order.index',['status'=>'refunded'])}}" class="menu-link">
-                    <span class="menu-text"> الطلبات المستردة</span>
-                    <span class="badge bg-success rounded-pill ms-auto">4</span>
+            @if (\App\Modules\Core\Helper::module_permission_check('offers'))
+                <li class="menu-title"> العروض الترويجية</li>
+
+                <li class="menu-item">
+                    <a href="{{route('admin.notification.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="bell"></i>
+                    </span>
+                        <span class="menu-text"> إرسال إشعارات</span>
                     </a>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="{{route('admin.customer-wallet.create')}}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="gift"></i>
-                </span>
-                    <span class="menu-text"> شحن محفظة العميل</span>
-                </a>
-            </li>
-            <li class="menu-title"> المساعدة</li>
-            <li class="menu-item">
-                <a href="{{ route('admin.message.list') }}" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="message-square"></i>
-                </span>
-                    <span class="menu-text"> التواصل</span>
-                    <span class="badge bg-success rounded-pill ms-auto">4</span>
-                </a>
-            </li>
-            <li class="menu-title">إدارة عمليات البيع</li>
-            <li class="menu-item">
-                <a href="withdraw-transaction.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="dollar-sign"></i>
-                </span>
-                    <span class="menu-text"> طلبات سحب الأموال</span>
-                    <span class="badge bg-success rounded-pill ms-auto">4</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="credit-card"></i>
-                </span>
-                    <span class="menu-text"> وسائل الدفع</span>
-                </a>
-            </li>
-            <li class="menu-title">إدارة الموظفين</li>
-            <li class="menu-item">
-                <a href="employees.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="users"></i>
-                </span>
-                    <span class="menu-text">موظفي بسطة</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="roles.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="gitlab"></i>
-                </span>
-                    <span class="menu-text">الأدوار</span>
-                </a>
-            </li>
-            <li class="menu-title">إدارة التقارير</li>
-            <li class="menu-item">
-                <a href="report-1.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="trello"></i>
-                </span>
-                    <span class="menu-text">تقارير الطلبات</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="report-2.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="trello"></i>
-                </span>
-                    <span class="menu-text">تقارير المحلات</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="report-3.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="trello"></i>
-                </span>
-                    <span class="menu-text">تقارير العملاء</span>
-                </a>
-            </li>
-            <li class="menu-item">
-                <a href="report-4.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="trello"></i>
-                </span>
-                    <span class="menu-text">تقارير الربح</span>
-                </a>
-            </li>
-            <li class="menu-title">إعدادات البيزنس</li>
-            <li class="menu-item">
-                <a href="app-settings.html" class="menu-link">
-                <span class="menu-icon">
-                  <i data-feather="settings"></i>
-                </span>
-                    <span class="menu-text"> إعدادات البيزنس</span>
-                </a>
-            </li>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.banner.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="target"></i>
+                    </span>
+                        <span class="menu-text"> إنشاء إعلانات</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.coupon.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="percent"></i>
+                    </span>
+                        <span class="menu-text"> كوبونات التخفيض</span>
+                    </a>
+                </li>
+            @endif
+            @if (\App\Modules\Core\Helper::module_permission_check('places'))
+                <li class="menu-title"> إدارة أصحاب المحلات</li>
+                <li class="menu-item">
+                    <a href="{{route('admin.place.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="briefcase"></i>
+                    </span>
+                        <span class="menu-text"> أصحاب المحلات</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.place.create')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="folder-plus"></i>
+                    </span>
+                        <span class="menu-text"> إضافة صاحب محل</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.compilation.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="grid"></i>
+                    </span>
+                        <span class="menu-text"> التصنيفات</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.compilation.create')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="target"></i>
+                    </span>
+                        <span class="menu-text"> إضافة تصنيف</span>
+                    </a>
+                </li>
+            @endif
+            @if (\App\Modules\Core\Helper::module_permission_check('order_clients'))
+                <li class="menu-title">إدارة العملاء</li>
+                <li class="menu-item">
+                    <a href="{{route('admin.order.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="shopping-bag"></i>
+                    </span>
+                        <span class="menu-text"> الطلبات</span>
+                        <span class="badge bg-success rounded-pill ms-auto">4</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.customer.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="users"></i>
+                    </span>
+                        <span class="menu-text"> العملاء</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="refund-orders.html" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="gift"></i>
+                    </span>
+                        <a href="{{route('admin.order.index',['status'=>'refunded'])}}" class="menu-link">
+                        <span class="menu-text"> الطلبات المستردة</span>
+                        <span class="badge bg-success rounded-pill ms-auto">4</span>
+                        </a>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.customer-wallet.create')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="gift"></i>
+                    </span>
+                        <span class="menu-text"> شحن محفظة العميل</span>
+                    </a>
+                </li>
+            @endif
+            @if (\App\Modules\Core\Helper::module_permission_check('chat'))
+                <li class="menu-title"> المساعدة</li>
+                <li class="menu-item">
+                    <a href="{{ route('admin.message.list') }}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="message-square"></i>
+                    </span>
+                        <span class="menu-text"> التواصل</span>
+                        <span class="badge bg-success rounded-pill ms-auto">4</span>
+                    </a>
+                </li>
+            @endif
+            @if (\App\Modules\Core\Helper::module_permission_check('withdraw_payment'))
+                <li class="menu-title">إدارة عمليات البيع</li>
+                <li class="menu-item">
+                    <a href={{route('admin.withdraw.list')}} class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="dollar-sign"></i>
+                    </span>
+                        <span class="menu-text"> طلبات سحب الأموال</span>
+                        <span class="badge bg-success rounded-pill ms-auto">4</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="credit-card"></i>
+                    </span>
+                        <span class="menu-text"> وسائل الدفع</span>
+                    </a>
+                </li>
+            @endif
+            @if (\App\Modules\Core\Helper::module_permission_check('admin_role_employee'))
+                <li class="menu-title">إدارة الموظفين</li>
+                <li class="menu-item">
+                    <a href={{route('admin.employee.index')}} class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="users"></i>
+                    </span>
+                        <span class="menu-text">موظفي بسطة</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.role.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="gitlab"></i>
+                    </span>
+                        <span class="menu-text">الأدوار</span>
+                    </a>
+                </li>
+            @endif
+            @if (\App\Modules\Core\Helper::module_permission_check('report'))
+                <li class="menu-title">إدارة التقارير</li>
+                <li class="menu-item">
+                    <a href="report-1.html" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="trello"></i>
+                    </span>
+                        <span class="menu-text">تقارير الطلبات</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="report-2.html" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="trello"></i>
+                    </span>
+                        <span class="menu-text">تقارير المحلات</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="report-3.html" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="trello"></i>
+                    </span>
+                        <span class="menu-text">تقارير العملاء</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="report-4.html" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="trello"></i>
+                    </span>
+                        <span class="menu-text">تقارير الربح</span>
+                    </a>
+                </li>
+                <li class="menu-title">إعدادات البيزنس</li>
+                <li class="menu-item">
+                    <a href="{{route('admin.employee.edit',['id'=>\Illuminate\Support\Facades\Auth::guard('admin')->user()->id])}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="settings"></i>
+                    </span>
+                        <span class="menu-text"> إعدادات البيزنس</span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="{{route('admin.zone.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="bell"></i>
+                    </span>
+                        <span class="menu-text">المناطق </span>
+                    </a>
+                </li>
+            @endif
         </ul>
         <!--- End Menu -->
         <div class="clearfix"></div>

@@ -127,7 +127,7 @@
 
     <div class="auth-fluid-right text-center">
         <div class="auth-user-testimonial">
-            <img src="{{ isset($settings) ? $settings->{"logo_" . $color_scheme_mode . "_url"} : asset("images/logo.png") }}" alt="" class="w-100 mb-3"
+            <img src="{{ isset($settings) ? $settings->{"logo_" . $color_scheme_mode . "_url"} : asset("images/avatar.svg") }}" alt="" class="w-100 mb-3"
                  style="max-height: 60px; object-fit: contain">
             <p class="lead">
                 <i class="mdi mdi-format-quote-open"></i>

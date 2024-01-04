@@ -86,7 +86,9 @@ class PlaceController extends BaseController
     }
 
     public  function details($id){
+
        $data= $this->repository->details($id);
+
 
        return view($this->view . '.details', compact('data'));
     }
@@ -99,6 +101,14 @@ class PlaceController extends BaseController
         $data= $this->repository->change_status($id,$status);
 
         return redirect(route('admin.place.details',['id'=>$id]))->with('success','Place Status Changed succesfully');
+    }
+    public function fav_status($id,$status)
+    {
+        $status= !$status;
+        $this->repository->fav_status($id,$status);
+
+        //  redirect(route('vendor.product.index'));
+        return back()->with('success',__('favourite changed  successfully'));
     }
     /*function index(Request $request)
     {

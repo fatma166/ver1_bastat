@@ -47,6 +47,7 @@
                                 <th>الترقيم</th>
                                 <th>تاريخ إنشاء الإعلان</th>
                                 <th>الإعلان</th>
+                                <th> مكان الإعلان</th>
 
                                 <th>تفعيل</th>
                                 <th>الإجراء</th>
@@ -79,7 +80,7 @@
 
                                         </span>
                                 </td>
-
+                                <td>{{__($banner->module_place)}}</td>
                                 <td>
                                     <input type="checkbox"  @if($banner->status==1) checked @endif  data-plugin="switchery" value="{{$banner->status}}" id="change_status" status_id="{{$banner->id}}" data-color="#1bb99a" />
                                 </td>
@@ -87,11 +88,16 @@
                                 <td>
                                     <a href="{{route('admin.banner.edit', ['banner' => $banner->id])}}" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></a>
                                     <a href="{{route('admin.banner.delete', ['banner' => $banner->id])}}" class="action-icon"> <i class="mdi mdi-delete"></i></a>
+
                                 </td>
                             </tr>
                             @endforeach
                             @else
-                                <tr>no data found</tr>
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        {{__('no data available')}}
+                                    </td>
+                                </tr>
 
                             @endif
                             </tbody>

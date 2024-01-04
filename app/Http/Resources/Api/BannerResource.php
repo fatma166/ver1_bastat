@@ -21,7 +21,10 @@ class BannerResource extends JsonResource
             'type'=>$this->type??'restaurant_wise',
             'image_url'=>$this->image_url??"",
             "restaurant"=>$this->restaurant??"",
-            "food"=>$this->food??""
+            "food"=>$this->food??"",
+            "module_place"=>$this->module_place??"",
+            "priority"=>$this->priority??""
+
         ];
 
     }

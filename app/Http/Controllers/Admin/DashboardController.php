@@ -5,8 +5,10 @@ use App\Http\Controllers\Controller;
 use App\Models\DeliveryMan;
 use App\Models\Food;
 use App\Models\Order;
+use App\Models\OrderPaymentTransaction;
 use App\Models\Restaurant;
 use App\Models\User;
+use App\Models\Vendor;
 use App\Models\Wishlist;
 use App\Models\OrderTransaction;
 use Carbon\Carbon;
@@ -32,7 +34,21 @@ class DashboardController extends Controller
         $data = self::dashboard_data();
         $total_sell = $data['total_sell'];
         $commission = $data['commission'];*/
-
+        $data['monthly_order_amount'] = OrderPaymentTransaction::NotRefunded()->whereMonth('created_at', date('m'))
+                                                ->whereYear('created_at', date('Y'))->sum('order_amount');
+        $data['monthly_user_count'] = User::whereMonth('created_at', date('m'))
+            ->whereYear('created_at', date('Y'))->count();
+        $data['monthly_order_count']= OrderPaymentTransaction::whereMonth('created_at', date('m'))
+            ->whereYear('created_at', date('Y'))->count();
+        $data['monthly_vendor_count']=Vendor::whereMonth('created_at', date('m'))
+            ->whereYear('created_at', date('Y'))->count();
+        $data['top_restaurants'] = Restaurant::
+      /*  when(is_numeric($params['zone_id']), function($q)use($params){
+            return $q->where('zone_id', $params['zone_id']);
+        })
+            ->*/orderBy("order_count", 'desc')
+            ->take(6)
+            ->get();
         return view('admin-views.index'/*, compact('data', 'total_sell', 'commission', 'params')*/);
     }
 

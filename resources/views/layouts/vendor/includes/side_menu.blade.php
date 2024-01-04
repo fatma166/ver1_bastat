@@ -99,7 +99,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="refund-orders.html" class="menu-link">
+                <a href="{{route('vendor.order.index',['status'=>'refunded'])}}"  class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="gift"></i>
                 </span>
@@ -138,7 +138,7 @@
             </li>
             <li class="menu-title">إعدادات البيزنس</li>
             <li class="menu-item">
-                <a href="app-settings.html" class="menu-link">
+                <a href="{{route('vendor.employee.edit',['id'=>\Illuminate\Support\Facades\Auth::guard('vendor')->user()->id])}}" class="menu-link">
                 <span class="menu-icon">
                   <i data-feather="settings"></i>
                 </span>

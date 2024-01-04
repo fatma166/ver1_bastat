@@ -64,7 +64,7 @@
                                 <td>
                                     <span class="media align-items-center">
                                             <img class="avatar avatar-lg mr-3 avatar--3-1" src="{{$compilation['image_url']}}"
-                                                 onerror="this.src='{{asset('assets/images/logo.png')}}'" alt="{{$compilation->title}} image">
+                                                 onerror="this.src='{{asset('assets/images/avatar.svg')}}'" alt="{{$compilation->title}} image">
                                             <div class="media-body">
                                                 <h5 class="text-hover-primary mb-0">{{Str::limit($compilation['title'], 25, '...')}}</h5>
                                             </div>

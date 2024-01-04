@@ -21,9 +21,9 @@ class OrderController extends BaseController
     public function index(Request $request, $with = [], $withCount = [], $filter = '', $paginate = 10, $whereHas = [])
     {
 
+        $status=(isset($request->status))?$request->status:'all';
+       $orders= parent::index($request, ['restaurant'=>function ($query) {$query->with('vendor');}], [], 'restaurant_id|' . Helper::get_restaurant_id(). '|=', 10, []);//= &&'. 'order_status|' . $status . '|='
 
-       $orders= parent::index($request, ['restaurant'=>function ($query) {$query->with('vendor');}], [], 'restaurant_id|' . Helper::get_restaurant_id(). '|=', 10, []);
-//print_R($orders); exit;
        /* if ($request->filled("export_excel") && $request->export_excel == true) {
 
 

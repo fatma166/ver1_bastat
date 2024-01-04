@@ -52,7 +52,7 @@
                             @foreach($orders as $order)
                                 @if(!isset($order->restaurant->name))
 
-                                   @continue
+
                                 @endif
                             <tr>
                                 <td>
@@ -65,7 +65,7 @@
                                 <td> {{\Carbon\Carbon::parse($order->creared_at)->translatedFormat('l j F Y H:i:s')}}</td>
                                 <td>@if(isset($order->restaurant->vendor->f_name)){{$order->restaurant->vendor->f_name}}   {{$order->restaurant->vendor->l_name}}<br>{{$order->restaurant->vendor->phone}}@else {{__('notfound')}} @endif</td>
                                 <td class="table-user">
-                                    <img src="{{asset($order->logo)}}" alt="table-user" class="me-2 rounded-circle" onerror="this.src='{{asset('assets/images/logo.png')}}'">
+                                    <img src="{{asset($order->logo)}}" alt="table-user" class="me-2 rounded-circle" onerror="this.src='{{asset('assets/images/avatar.svg')}}'">
                                     <a href="javascript:void(0);" class="text-body fw-semibold">{{$order->restaurant->name}}</a>
                                 </td>
                                 <td>{{$order->order_amount}} </td>

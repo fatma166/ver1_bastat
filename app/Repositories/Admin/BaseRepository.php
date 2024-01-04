@@ -73,13 +73,18 @@ class BaseRepository implements AdminRepositoryInterface
                 foreach ($filterArr as $value) {
                     $value_attr= explode("|",$value);
 
-                    if($value_attr[1]!='all') {
+                    if($value_attr[1] != 'all') {
+
                         $query = $this->where($query, $value);
                     }
                 }
             }else{
+                $value_attr= explode("|", $filter);
 
-                $query = $this->where($query, $filter);
+                if($value_attr[1] != 'all') {
+
+                    $query = $this->where($query, $filter);
+                }
 
             }
 

@@ -52,7 +52,18 @@ if( isset($this->restaurant)){
             'rating_count'=>$this->rating_count,
             'distance_time'=>$this->distance_time??0,
             'category_ids'=> CategoryResource::collection(Category::where('restaurant_id',$this->id)->get()),
-            'compilation_id'=>$this->compilation_id?? 0
+            'compilation_id'=>$this->compilation_id?? 0,
+            'fav'=> $this->whenLoaded('fav', function() {
+                 if($this->fav!="" ||$this->fav!= "null"){
+                    return 1;
+                   }else{
+
+                    return 0;
+                   }
+               // return $this->fav;
+                       //  if(empty($this->fav)) return 0 ; else return 1;
+
+            })??0
         ];
     }
 }

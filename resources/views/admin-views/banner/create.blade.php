@@ -47,6 +47,19 @@
                                     @endError
                                 </div>
                                 <div class="mb-3">
+                                    <label for="selectmethod" class="form-label">مكان الاعلان</label>
+                                    <select name="module_place" class="form-control js-select2-custom" >
+                                        <option value="homefirst" >{{__('homefirst')}}</option>
+                                        <option value="homedown_discount" >{{__('homedown_discount')}}</option>
+                                        <option value="homedown_offers" >{{__('homedown_offers')}}</option>
+                                        <option value="inner_page" >{{__('inner_page')}}</option>
+                                    </select>
+                                    @error("module_place")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
+                                </div>
+
+                                <div class="mb-3">
                                     <div class="mb-3">
 
                                         <div class="mt-3 logo_img_block">
@@ -91,6 +104,15 @@
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
+
+                                <div class="mb-3">
+                                    <label for="selectmethod" class="form-label">اولوية الاعلان</label>
+                                    <input type="number" name="priority"  class="form-control js-select2-custom" />
+
+                                    @error("priority")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
+                                </div>
                             </div>
                         </div>
                         <!-- end row -->
@@ -118,7 +140,7 @@
     <!-- end row-->
 
 @endsection
-@section('script')
+@push('script')
 
 
     <script>
@@ -140,5 +162,5 @@
 
 
     </script>
-    @endsection
+    @endpush
 

@@ -126,7 +126,8 @@ class Restaurant extends Model
 		'non_veg',
 		'order_count',
 		'minimum_shipping_charge',
-		'per_km_shipping_charge'
+		'per_km_shipping_charge',
+        'selected_admin'
 	];
     protected $appends = ['gst_status','gst_code','logo_url','cover_photo_url','rate_data'];
 
@@ -141,7 +142,7 @@ class Restaurant extends Model
 
     public function getRateDataAttribute()
     {
-        echo"jkjk"; exit;
+       // echo"jkjk"; exit;
         $data= Helper::calculate_restaurant_rating($this->rating);
         return $data['rating'];
     }
@@ -165,7 +166,7 @@ class Restaurant extends Model
     }
     public function fav()
     {
-        return $this->belongsTo(FavRestaurant::class,'restaurant_id','id');
+        return $this->belongsTo(FavRestaurant::class,'id','restaurant_id');
     }
 
     public function schedules()

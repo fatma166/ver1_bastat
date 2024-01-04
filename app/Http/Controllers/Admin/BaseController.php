@@ -42,6 +42,7 @@ class BaseController extends Controller
         $item = $this->repository->update($id, $request);
         if ($item) {
             session()->flash('success', __('updated successfully'));
+
         }
         return $item;
     }

@@ -102,8 +102,8 @@ class FCMService
         // Close connection
         curl_close($ch);
         // FCM response
-       // dd($result);
-       // return $result;
+        // dd($result);
+        // return $result;
     }
     public static function send_push_notif_to_device($fcm_token, $data)
     {
@@ -174,39 +174,7 @@ class FCMService
 
         return $result;
     }
-    public static function order_status_update_message($status)
-    {
-        if ($status == 'pending') {
-            $data = __( 'order_pending_message');
-        } elseif ($status == 'confirmed') {
-            $data =__( 'order_confirmation_msg');
-        } elseif ($status == 'processing') {
-            $data =__( 'order_processing_message');
-        } elseif ($status == 'picked_up') {
-            $data =__( 'out_for_delivery_message');
-        } elseif ($status == 'handover') {
-            $data =__( 'order_handover_message');
-        } elseif ($status == 'delivered') {
-            $data =__('order_delivered_message');
-        } elseif ($status == 'delivery_boy_delivered') {
-            $data = __( 'delivery_boy_delivered_message');
-        } elseif ($status == 'accepted') {
-            $data = __( 'delivery_boy_assign_message');
-        } elseif ($status == 'canceled') {
-            $data = __( 'order_cancled_message');
-        } elseif ($status == 'refunded') {
-            $data =__( 'order_refunded_message');
-        } else {
-            $data = '{"status":"0","message":""}';
-        }
 
-        $res = json_decode($data, true);
-
-        if ($res['status'] == 0) {
-            return 0;
-        }
-        return $res['message'];
-    }
     public static function send_order_notification($order)
     {
 
@@ -249,20 +217,20 @@ class FCMService
 
             if ($order->order_type == 'delivery' && $order->order_status == 'pending' && $order->payment_method == 'cash_on_delivery' && $order->order_type != 'take_away') {
 
-                    $data = [
-                        'title' => __('order_push_title'),
-                        'description' => __('new_order_push_description'),
-                        'order_id' => $order->id,
-                        'image' => '',
-                        'type' => 'new_order',
-                    ];
-                    self::send_push_notif_to_device($order->restaurant->vendor->firebase_token, $data);
-                    DB::table('user_notifications')->insert([
-                        'data' => json_encode($data),
-                        'vendor_id' => $order->restaurant->vendor_id,
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
+                $data = [
+                    'title' => __('order_push_title'),
+                    'description' => __('new_order_push_description'),
+                    'order_id' => $order->id,
+                    'image' => '',
+                    'type' => 'new_order',
+                ];
+                self::send_push_notif_to_device($order->restaurant->vendor->firebase_token, $data);
+                DB::table('user_notifications')->insert([
+                    'data' => json_encode($data),
+                    'vendor_id' => $order->restaurant->vendor_id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
 
             }
 
@@ -302,20 +270,20 @@ class FCMService
 
             if ($order->order_status == 'confirmed' && $order->order_type != 'take_away'&& $order->payment_method == 'cash_on_delivery') {
 
-                    $data = [
-                        'title' => __('order_push_title'),
-                        'description' => __('new_order_push_description'),
-                        'order_id' => $order->id,
-                        'image' => '',
-                        'type' => 'new_order',
-                    ];
-                    self::send_push_notif_to_device($order->restaurant->vendor->firebase_token, $data);
-                    DB::table('user_notifications')->insert([
-                        'data' => json_encode($data),
-                        'vendor_id' => $order->restaurant->vendor_id,
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
+                $data = [
+                    'title' => __('order_push_title'),
+                    'description' => __('new_order_push_description'),
+                    'order_id' => $order->id,
+                    'image' => '',
+                    'type' => 'new_order',
+                ];
+                self::send_push_notif_to_device($order->restaurant->vendor->firebase_token, $data);
+                DB::table('user_notifications')->insert([
+                    'data' => json_encode($data),
+                    'vendor_id' => $order->restaurant->vendor_id,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
 
             }
 
@@ -324,5 +292,39 @@ class FCMService
             info($e);
         }
         return false;
+    }
+
+    public static function order_status_update_message($status)
+    {
+        if ($status == 'pending') {
+            $data = __( 'order_pending_message');
+        } elseif ($status == 'confirmed') {
+            $data =__( 'order_confirmation_msg');
+        } elseif ($status == 'processing') {
+            $data =__( 'order_processing_message');
+        } elseif ($status == 'picked_up') {
+            $data =__( 'out_for_delivery_message');
+        } elseif ($status == 'handover') {
+            $data =__( 'order_handover_message');
+        } elseif ($status == 'delivered') {
+            $data =__('order_delivered_message');
+        } elseif ($status == 'delivery_boy_delivered') {
+            $data = __( 'delivery_boy_delivered_message');
+        } elseif ($status == 'accepted') {
+            $data = __( 'delivery_boy_assign_message');
+        } elseif ($status == 'canceled') {
+            $data = __( 'order_cancled_message');
+        } elseif ($status == 'refunded') {
+            $data =__( 'order_refunded_message');
+        } else {
+            $data = '{"status":"0","message":""}';
+        }
+
+        $res = json_decode($data, true);
+
+        if ($res['status'] == 0) {
+            return 0;
+        }
+        return $res['message'];
     }
 }

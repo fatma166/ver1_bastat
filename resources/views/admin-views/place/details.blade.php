@@ -4,6 +4,7 @@
 @endsection
 
 @section('content')
+
     <!-- start page title -->
     <div class="row">
         <div class="col-12">
@@ -74,7 +75,7 @@
                             </div>
                             <div class="col-6">
                                 <div class="text-end">
-                                    <h3 class="text-dark mt-1">ر.س <span data-plugin="counterup">{{$data['withdraw'][0]->withdraw_amount}} </span>
+                                    <h3 class="text-dark mt-1">ر.س<span data-plugin="counterup">{{$data['withdraw'][0]->withdraw_amount}} </span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate"> المسحوب</p>
                                 </div>
@@ -170,7 +171,7 @@
                             <div class="d-flex align-items-start">
                                 <img src="{{asset($data['place']['logo'])}}"  class="rounded-circle me-2" height="24"  onerror="this.src='{{asset('assets/images/logo.png')}}'" />
                                 <div class="w-100">
-                                    <p> {{isset($data['place']->vendor->f_name)?$data['place']->vendor->f_name:""}}  {{isset($data['place']->vendor->l_name)?$data['place']->vendor->l_name:""}}</p>
+                                    <p> {{ isset($data['place']->vendor->f_name)? $data['place']->vendor->f_name:""}}  {{isset($data['place']->vendor->l_name)?$data['place']->vendor->l_name:""}}</p>
                                 </div>
                             </div>
                             <!-- end Reported by -->
@@ -304,6 +305,9 @@
                                                 @if(count($data['orders'])>0)
                                                     @foreach(($data['orders']) as $order)
 
+                                                        @if(!isset($order->vendor->f_name))
+                                                            @continue
+                                                            @endif
                                                         <tr>
                                                         <td>
                                                             <div class="form-check">
@@ -313,7 +317,7 @@
                                                         </td>
                                                         <td> {{$order->id}} </td>
                                                         <td> {{$order->created_at}} </td>
-                                                        <td>{{$order->vendor->f_name}}  {{$order->vendor->l_name}}<br>{{$order->vendor->phone}} </td>
+                                                        <td> {{ isset($order->vendor->f_name)? $order->vendor->f_name:""}}  {{isset($order->vendor->l_name)?$order->vendor->l_name:""}} <br>{{$order->vendor->phone}} </td>
                                                         <td class="table-user">
                                                             <img src="{{asset($data['place']['logo'])}}" alt="table-user" class="me-2 rounded-circle"  onerror="this.src='{{asset('assets/images/logo.png')}}'" >
                                                             <a href="javascript:void(0);" class="text-body fw-semibold">{{$data['place']['name']}}</a>

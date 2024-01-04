@@ -17,7 +17,6 @@
 <script src="{{asset('assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js')}}"></script>
 <script src="{{asset('assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js')}}"></script>
 <script src="{{asset('assets/libs/dropzone/min/dropzone.min.js')}}"></script>
-<script src="{{asset('assets/libs/dropify/js/dropify.min.js')}}"></script>
 <!-- Init js--><!-- Quill js -->
 <script src="{{asset('assets/libs/quill/quill.min.js')}}"></script>
 <script src="{{asset('assets/js/pages/form-fileuploads.init.js')}}"></script>
@@ -31,6 +30,7 @@
 <!-- Init js-->
 <script src="{{asset('assets/js/pages/form-fileuploads.init.js')}}"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="{{asset('assets/libs/dropify/js/dropify.min.js')}}"></script>
 
 
 <script>

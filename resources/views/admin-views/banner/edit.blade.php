@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 @section('title')
-    {{__("index_banner")}}
+    {{__("edit_banner")}}
 @endsection
 
 @section('content')
@@ -42,6 +42,18 @@
 
                                 </div>
                                 <div class="mb-3">
+                                    <label for="selectmethod" class="form-label">مكان الاعلان</label>
+                                    <select name="module_place" class="form-control js-select2-custom" >
+                                        <option value="homefirst" @if($banner->module_place=="homefirst") selected @endif>{{__('homefirst')}}</option>
+                                        <option value="homedown_discount" @if($banner->module_place=="homedown_discount") selected @endif >{{__('homedown_discount')}}</option>
+                                        <option value="homedown_offers" @if($banner->module_place=="homedown_offers") selected @endif>{{__('homedown_offers')}}</option>
+                                        <option value="inner_page" @if($banner->module_place=="inner_page") selected @endif >{{__('inner_page')}}</option>
+                                    </select>
+                                    @error("module_place")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
+                                </div>
+                                <div class="mb-3">
                                     <div class="mt-3 logo_img_block">
 
                                         <input type="file"  name="image[]" class="logo_img" data-plugins="dropify" data-max-file-size="1M" accept="image/*"  />
@@ -74,6 +86,15 @@
                                             <option value="{{$place['id']}}" {{$place->id == $banner->place_id?'selected':''}}>{{$place['name']}}</option>
                                         @endforeach
                                     </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="selectmethod" class="form-label">اولوية الاعلان</label>
+                                    <input type="number" name="priority"  value="{{$banner->priority}}" class="form-control js-select2-custom" />
+
+                                    @error("priority")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
                                 </div>
                             </div>
                         </div>

@@ -5,10 +5,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AddressRequest;
 use App\Http\Requests\Api\DeleteAddressRequest;
 use App\Http\Requests\Api\UpdateAddressRequest;
+use App\Models\User;
 use App\Modules\Core\HTTPResponseCodes;
 use App\Repositories\Api\UserRepository;
 use App\Traits\LocationTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -135,6 +138,43 @@ class UserController extends Controller
                 'message' =>HTTPResponseCodes::BadRequest['message'],
                 'code'=>HTTPResponseCodes::BadRequest['code']
                 ],HTTPResponseCodes::Sucess['code']);
+        }
+
+
+    }
+
+    protected function edit_profile(Request $request){
+       if($request->has('f_name')){
+           $name = $request->f_name;
+           $parts = explode(' ', $name);
+
+           $firstName = $parts[0];
+           $lastName = isset($parts[1]) ? $parts[1] : '';
+           $data['f_name']=$firstName;
+           $data['l_name']=$lastName;
+       }
+        if($request->has('email')){
+            $data['email']=$request->email;
+        }
+        if($request->has('password')){
+            $data['password']=Hash::make($request->password);
+        }
+        try{
+            user::where('id',Auth::guard('api')->user()->id)->update($data);
+            return response()->json([
+                'status' => HTTPResponseCodes::Sucess['status'],
+                'message' => HTTPResponseCodes::Sucess['message'],
+                'errors' => [],
+                'data' =>[],
+                'code' => HTTPResponseCodes::Sucess['code']
+            ], HTTPResponseCodes::Sucess['code']);
+        }catch (\Exception $e) {
+            return response()->json([
+                'status' =>false,
+                'errors'=>__('error when retrieve data'),
+                'message' =>HTTPResponseCodes::BadRequest['message'],
+                'code'=>HTTPResponseCodes::BadRequest['code']
+            ],HTTPResponseCodes::Sucess['code']);
         }
 
 

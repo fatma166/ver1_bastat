@@ -15,6 +15,7 @@ class BannerController extends Controller
     public function get_banner(Request $request){
 
        $data= $request->all();
+       $module_place=$data['module_place']??"all";
         if((!$request->filled('lati')&& !$request->filled(('longi'))) && ((!$request->filled('zone_id'))||empty($request['zone_id'])))
 
             return     response()->json([
@@ -42,7 +43,7 @@ class BannerController extends Controller
 
           $banner = new BannerRepositories();
 
-          $banners = $banner->get_banner($zone_ids);
+          $banners = $banner->get_banner($zone_ids,$module_place);
 
         return response()->json([
             'status' => HTTPResponseCodes::Sucess['status'],

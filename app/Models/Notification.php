@@ -39,8 +39,9 @@ class Notification extends Model
 		'description',
 		'image',
 		'status',
-		'tergat',
-		'zone_id'
+		'target',
+		'zone_id',
+      //  'type'
 	];
 
     public function getDataAttribute()
@@ -50,7 +51,7 @@ class Notification extends Model
             "description"=> $this->description,
             "order_id"=> "",
             "image"=> $this->image,
-            "type"=> "order_status"
+            "type"=>"topic_customer" //$this->type//"order_status"
         ];
     }
 
