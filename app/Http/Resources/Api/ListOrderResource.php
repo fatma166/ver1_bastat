@@ -15,6 +15,10 @@ class ListOrderResource extends JsonResource
     public function toArray($request)
     {
        // return parent::toArray($request);
+        $dataa=$this->created_At;
+        if(date('d M Y',strtotime($this->created_at))==date('d M Y')) { $dataa= date('H:i',strtotime($this->created_at));} elseif(date('Y',strtotime($this->created_at))!= date('Y')) { $dataa= date('d M Y',strtotime($this->created_at)). date('H:i',strtotime($this->created_at));}
+        else { $dataa =date('d M',strtotime($this->created_at)) . date('H:i',strtotime($this->created_at)) ;}
+
         return [
             'order_id'=>$this->id,
             'user_id'=>$this->user_id,
@@ -27,7 +31,11 @@ class ListOrderResource extends JsonResource
             'picked_up'=>$this->picked_up??"00:00:00",
             'processing_time'=>$this->processing_time??"00",
             'restaurant_id'=>$this->restaurant->id,
-             'restaurant_name'=>$this->restaurant->name,
+            'restaurant_name'=>$this->restaurant->name,
+            'delivery_time'=>$this->restaurant->delivery_time??0,
+            'delivery_time_unit'=>$this->restaurant->delivery_time_unit?__($this->restaurant->delivery_time_unit):__("minutes"),
+            'restaurant_id'=>$this->restaurant_id??0,
+            'delivery_charge'=>$this->restaurant->delivery_charge,
             'phone'=>$this->restaurant->phone,
             'logo_url'=>$this->restaurant->logo_url,
             'cover_url'=>$this->restaurant->cover_photo_url??"",
@@ -36,6 +44,9 @@ class ListOrderResource extends JsonResource
             'longitude'=>$this->restaurant->longitude,
             'footer_text'=>$this->restaurant->footer_text??"",
             'details_count'=>$this->details_count,
+            'created_at'=>$dataa,
+            'updated_at'=>$this->updated_at
+
 
         ];
     }

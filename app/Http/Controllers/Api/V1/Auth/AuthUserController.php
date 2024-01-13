@@ -1,5 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api\V1\Auth;
+use App\Models\CustomerAddress;
+use App\Models\Otp_code;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Hash;
@@ -66,10 +68,14 @@ class AuthUserController extends Controller
 
 
         // if (Hash::check($request->password, $user->password)) {
-        $user = Auth::guard('api')->user();
+        $user= Auth::guard('api')->user();
         $token = Auth::guard('api')->attempt($validated);
+
         //  $token = $user->createToken('Laravel Password Grant Client')->accessToken;
         $user['token']= $token;
+
+        $address= CustomerAddress::where('user_id',$user->id)->orderBy('id','desc')->first();
+        $user['address']=$address;
 
         return response()->json([
             'status' =>HTTPResponseCodes::Sucess['status'],
@@ -348,12 +354,19 @@ class AuthUserController extends Controller
 
         $phoneNum =$request['phone'];
 
-        $user = User::where('phone', '=', $phoneNum)->firstOrFail();
+        $user = User::where('phone', '=', $phoneNum)->first();
         if($user)
         {
-            Session::put('phone',$phoneNum);
+            //Session::put('phone',$phoneNum);
 
-            $user->sendToken();
+            $otp= $user->sendToken();
+            $expiresAt = now()->addMinutes(5);
+            $otpModel = new Otp_code();
+            $otpModel->user_id= $user->id;
+            $otpModel->otp_code =$otp;
+            $otpModel->phone =$phoneNum;
+            $otpModel->expire= $expiresAt;
+            $otpModel->save();
             return response()->json([
                 'status' => HTTPResponseCodes::Sucess['status'],
                 'message'=>HTTPResponseCodes::Sucess['message'],
@@ -380,8 +393,7 @@ class AuthUserController extends Controller
      */
     public function validatePassowrd(Request $request){
 
-        $req=Validator::make($request->all(),['token'=>'required','password'=>'required|min:6',
-            'confirmpass'=>'required|same:password']);
+        $req=Validator::make($request->all(),['token'=>'required']);
         if($req->fails()){
             return response()->json([
                 'status' => HTTPResponseCodes::UnAuth['status'],
@@ -392,49 +404,64 @@ class AuthUserController extends Controller
             ],HTTPResponseCodes::UnAuth['code']);
         }
         $token=$request['token'];
-        $newpassword=$request['password'];
+        $phone=$request['phone'];
 
-        $phoneNum=Session::get('phone');
+        $user=User::where('phone', '=',$phone)->first();
 
-        $user = User::where('phone', '=', $phoneNum)->firstOrFail();
-
-        if($user && $user->validateToken($token)) {
-            try{
-                $this->changePassword($phoneNum,$newpassword);
-            }catch(\Exception $e){
-                return response()->json([
-                    'status' => HTTPResponseCodes::BadRequest['status'],
-                    'message'=>HTTPResponseCodes::BadRequest['message'],
-                    'errors' =>[],
-
-                    'code'=>HTTPResponseCodes::BadRequest['code']
-                ],HTTPResponseCodes::BadRequest['code']);
-            }
-            return  response()->json([
+        if($user && $user->validateToken($token,$phone)) {
+            return response()->json([
                 'status' => HTTPResponseCodes::Sucess['status'],
-                'message'=>HTTPResponseCodes::Sucess['status'],
+                'message'=>HTTPResponseCodes::Sucess['message'],
                 'errors' => [],
-                'data' => $user,
+                'data' => ['phone'=>$phone,'token'=>$token],
                 'code'=>HTTPResponseCodes::Sucess['code']
             ],HTTPResponseCodes::Sucess['code']);
-
-        } else
-        {
-            return response()->json([
-                'status'=> HTTPResponseCodes::BadRequest['status'],
-                'message'=>HTTPResponseCodes::BadRequest['message'],
-                'errors' => [],
-
-                'code'=>HTTPResponseCodes::BadRequest['code']
-            ],HTTPResponseCodes::BadRequest['code']);
-
         }
+        return response()->json([
+            'status' => HTTPResponseCodes::BadRequest['status'],
+            'message'=>HTTPResponseCodes::BadRequest['message'],
+            'errors' =>[],
+
+            'code'=>HTTPResponseCodes::BadRequest['code']
+        ],HTTPResponseCodes::BadRequest['code']);
+
     }
     /**
      *
      */
-    protected function changePassword($phone,$newpassword){
-        User::where('phone_number', '=', $phoneNum)->update(array('password'=>Hash::make($newpassword)));
+    protected function changePassword(Request $request){
+        $req=Validator::make($request->all(),['token'=>'required','phone'=>'required','password'=>'required|min:6',
+            'confirmpass'=>'required|same:password']);
+        if($req->fails()){
+            return response()->json([
+                'status' => HTTPResponseCodes::UnAuth['status'],
+                'message'=>HTTPResponseCodes::UnAuth['message'],
+                'errors' => [],
+
+                'code'=>HTTPResponseCodes::UnAuth['code']
+            ],HTTPResponseCodes::UnAuth['code']);
+        }
+        $phone=$request->phone;
+        $password=$request->password;
+
+        try{
+            User::where('phone',$phone)->update(array('password'=>Hash::make($password)));
+            return response()->json([
+                'status' => HTTPResponseCodes::Sucess['status'],
+                'message'=>HTTPResponseCodes::Sucess['message'],
+                'errors' => [],
+                'data' => [],
+                'code'=>HTTPResponseCodes::Sucess['code']
+            ],HTTPResponseCodes::Sucess['code']);
+        }catch(\Exception $e){
+            return response()->json([
+                'status' => HTTPResponseCodes::BadRequest['status'],
+                'message'=>HTTPResponseCodes::BadRequest['message'],
+                'errors' =>[],
+
+                'code'=>HTTPResponseCodes::BadRequest['code']
+            ],HTTPResponseCodes::BadRequest['code']);
+        }
     }
 
     /**

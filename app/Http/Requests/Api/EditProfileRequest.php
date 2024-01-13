@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
 use App\Modules\Core\HTTPResponseCodes;
-class CategoryRequest extends FormRequest
+class EditProfileRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,7 @@ class CategoryRequest extends FormRequest
 
         return [
            'f_name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|nullable',
 
         ];
 

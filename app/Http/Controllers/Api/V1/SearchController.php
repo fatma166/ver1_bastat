@@ -42,7 +42,7 @@ class SearchController extends Controller
         $result=[];
         $result['restaurants']= $rest->get_restaurant($zone_ids,$filter_data,$limit_place,$offset_place,$location);
 
-       // $filter_data_food=['name'=>$search_value,'category_ids'=>$compilation_id];
+        // $filter_data_food=['name'=>$search_value,'category_ids'=>$compilation_id];
         $food=new FoodRepository();
         $result['foods']= $food->get_food($zone_ids,"all","all",$limit_food,$offset_food,$location,$filter_data);
 
@@ -53,14 +53,57 @@ class SearchController extends Controller
             'data' => $result,
             'code'=>HTTPResponseCodes::Sucess['code']
         ],HTTPResponseCodes::Sucess['code']);
-      //  print_r($result); exit;
+        //  print_r($result); exit;
 
     }
+    public function home_search_2(Request $request){
+        $search_value=$request->search;
+        $compilation_id=$request->compilation_id;
+        $limit_place= $request->limit_place;
+        $offset_place=$request->offset_place;
+        $limit_food= $request->limit_food;
+        $offset_food=$request->offset_food;
+        if($request->filled('type'))
+            $type=$request->type;
+        if((!$request->filled('zone_id')) && !empty($request['zone_id'])) {
+            $zone_ids=array($request['zone_id']);
+        }else {
+            $data = array('latitude' => $request['lati'], 'longitude' => $request['longi']);
+            $zone_ids = $this->get_zone_from_location($data);
+        }
 
+        //try {
+        $location=[];
+        $filter_data=[];
+        if($request->filled('lati')&& $request->filled('lati'))
+            $location= array('lat' => $request['lati'], 'lng' => $request['longi']);
+        if($request->has('compilation_id')&&$compilation_id!=""&&$compilation_id!=null)
+            $filter_data=['name'=>$search_value,'compilation_id'=>$compilation_id];
+        elseif($request->has('search'))
+            $filter_data=['name'=>$search_value];
+
+        $rest=new RestaurantRepository();
+        //  $result=[];
+        $result= $rest->get_restaurant2($zone_ids,$filter_data,$limit_place,$offset_place,$location);
+
+        // $filter_data_food=['name'=>$search_value,'category_ids'=>$compilation_id];
+        /* $food=new FoodRepository();
+          $result['foods']= $food->get_food($zone_ids,"all","all",$limit_food,$offset_food,$location,$filter_data);*/
+
+        return response()->json([
+            'status' => HTTPResponseCodes::Sucess['status'],
+            'message'=>HTTPResponseCodes::Sucess['message'],
+            'errors' => [],
+            'data' => $result,
+            'code'=>HTTPResponseCodes::Sucess['code']
+        ],HTTPResponseCodes::Sucess['code']);
+        //  print_r($result); exit;
+
+    }
     public function advanced_rest_search(Request $request){
         $filter_data=[];
         if($request->has('high_orders'))
-        $filter_data['order_count']='asc';
+            $filter_data['order_count']='asc';
         if($request->has('high_rate'))
             $filter_data['high_rate']='asc';
         if($request->has('delivery_time'))

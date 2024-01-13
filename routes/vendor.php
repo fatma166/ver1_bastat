@@ -22,6 +22,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Vendor', 'as' => 'vendor.'], 
     Route::group(['middleware' => ['vendor']], function () {
         //dashboard
         Route::get('/', 'DashboardController@dashboard')->name('dashboard');
+        Route::get('line-chart', 'DashboardController@dashboard_data')->name('line-chart');
 
         Route::get('index_', 'DashboardController@index')->name('index_');
         Route::group(['prefix' => 'category', 'as' => 'category.'], function () {

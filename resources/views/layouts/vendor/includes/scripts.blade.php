@@ -24,7 +24,7 @@
 <script src="{{ asset('assets/js/pages/add-product.init.js')}}"></script>
 <script src="{{asset('assets/js/pages/form-advanced.init.js')}}"></script>
 <!-- Dashboar 1 init js-->
-<script src="{{asset('assets/js/pages/dashboard-1.init.js')}}"></script>
+<script src="{{asset('assets/js/pages/dashboard-1-vendor.init.js')}}"></script>
 
 
 <!-- Init js-->

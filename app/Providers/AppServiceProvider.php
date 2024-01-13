@@ -2,10 +2,11 @@
 
 namespace App\Providers;
 //use App\Models\Setting;
+use App\Models\BusinessSetting;
 use Illuminate\Support\Facades\View;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
-
+use Illuminate\Support\Facades\Config;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -25,7 +26,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $userTimezone1=BusinessSetting::where('key','timezone')->first();//'Asia/Riyadh';
+        $userTimezone=$userTimezone1->value??"Africa/Cairo";
+// Set the application's timezone dynamically
+        Config::set('app.timezone',$userTimezone);
+        date_default_timezone_set($userTimezone);
         Paginator::useBootstrap();
 
         view()->composer('*', function($view)

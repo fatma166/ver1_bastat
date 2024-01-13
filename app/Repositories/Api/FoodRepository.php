@@ -44,7 +44,11 @@ class FoodRepository implements FoodInterface
                                           });
                                       } elseif($filter_item=="name") {
                                           $paginator = $query->where($filter_item, 'like', '%' . $value . '%');
-                                      }else{
+                                      }
+                                      elseif ($filter_item=="except_id") {
+                                          $paginator= $query->where('id','!=',$value);
+                                      }else
+                                      {
                                           $paginator = $query->where($filter_item,$value);
                                       }
                                   }

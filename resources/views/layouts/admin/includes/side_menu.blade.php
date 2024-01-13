@@ -241,6 +241,14 @@
                     </a>
                 </li>
                 <li class="menu-item">
+                    <a href="{{route('admin.business_setting.index')}}" class="menu-link">
+                    <span class="menu-icon">
+                      <i data-feather="settings"></i>
+                    </span>
+                        <span class="menu-text"> إعدادات التطبيق</span>
+                    </a>
+                </li>
+                <li class="menu-item">
                     <a href="{{route('admin.zone.index')}}" class="menu-link">
                     <span class="menu-icon">
                       <i data-feather="bell"></i>

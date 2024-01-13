@@ -4,6 +4,7 @@ namespace App\Repositories\Api;
 
 
 use App\Http\Resources\Api\AddressResource;
+use App\Http\Resources\Api\GetOrderResource;
 use App\Http\Resources\Api\ListOrderResource;
 use App\Http\Resources\Api\TrackOrderResource;
 use App\Interfaces\Api\OrderInterface;
@@ -105,6 +106,12 @@ class OrderRepository implements OrderInterface
     }
     public function cart_order($request)
     {
+       /* if($request->has('reorder')){
+        $past_order_id=$request->past_order_id;
+        $order_data=Order::where('id',$past_order_id)->first();
+        $past_coupon_title=$order_data['coupon_discount_title'];
+        $request->cart_it=self::get_order_details($past_order_id);
+        }*/
 
         //print_r($request->all());
 
@@ -157,7 +164,7 @@ class OrderRepository implements OrderInterface
             $coupon = Coupon::active()->where(['code' => $request['coupon_code']])->first();
             if(isset($coupon['min_purchase']))
             {
-                if($request['amount']< $coupon['min_purchase'])
+                if($request['order_amount']< $coupon['min_purchase'])
                 {
                     return response()->json([
                         'status' =>false,
@@ -375,7 +382,7 @@ class OrderRepository implements OrderInterface
                     'status' =>HTTPResponseCodes::Sucess['status'],
                     'errors'=>[],
                     'message' =>__('order_placed_successfully'),
-                    'data' => ['order_id'=>$order->id,'total_amount'=>$order_amount],
+                    'data' => ['order_id'=>$order->id,'total_amount'=>$order_amount,'order_address'=>$order_address],
                     'code'=>200
                 ],HTTPResponseCodes::Sucess['code']);
 
@@ -490,11 +497,12 @@ class OrderRepository implements OrderInterface
     public function get_order_details($order_id)
     {
         // TODO: Implement get_order_details() method.
-        $details = OrderDetail::where(['order_id' =>$order_id])->get();
-        foreach ($details as $det) {
-            $det['product_details'] = json_decode($det['product_details'], true);
-        }
-        return $details;
+        $details = OrderDetail::where(['order_id' =>$order_id])->with('food')->get();
+        /* foreach ($details as $det) {
+             $det['product_details'] = json_decode($det['product_details'], true);
+         }*/
+        //  print_r($details); exit;
+        return GetOrderResource::collection($details);
     }
 
 

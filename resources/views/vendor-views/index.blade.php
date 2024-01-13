@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-6">
                             <div class="text-end">
-                                <h3 class="text-dark mt-1">ر.س <span data-plugin="counterup">58</span>
+                                <h3 class="text-dark mt-1">{{__(config('app.currency'))}} <span data-plugin="counterup">{{$data['monthly_order_amount']}}</span>
                                 </h3>
                                 <p class="text-muted mb-1 text-truncate">الأرباح</p>
                             </div>
@@ -59,9 +59,9 @@
                         </div>
                         <div class="col-6">
                             <div class="text-end">
-                                <a href="./orders.html">
+                                <a href="{{route('admin.order.index')}}">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">٣٤٣</span>
+                                        <span data-plugin="counterup">{{$data['monthly_order_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">عدد الطلبات</p>
                                 </a>
@@ -84,12 +84,12 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <a href="./places-list.html">
+                            <a href="{{route('admin.place.index')}}">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">825</span>
+                                        <span data-plugin="counterup">{{$data['monthly_product_count']}}</span>
                                     </h3>
-                                    <p class="text-muted mb-1 text-truncate">أصحاب محلات</p>
+                                    <p class="text-muted mb-1 text-truncate"> عدد المنتجات </p>
                                 </div>
                             </a>
                         </div>
@@ -111,9 +111,9 @@
                         </div>
                         <div class="col-6">
                             <div class="text-end">
-                                <a href="./customers.html">
+                                <a href="{{route('admin.customer.index')}}">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">2,430</span>
+                                        <span data-plugin="counterup">{{$data['monthly_user_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">عدد المستخدمين</p>
                                 </a>
@@ -164,58 +164,34 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @if($data['last_orders']->count()>0)
+                                @foreach($data['last_orders'] as $key=>$order)
                             <tr>
                                 <td style="width: 36px;">
-                                    <img src="assets/images/users/user-2.jpg" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm" />
+                                <td class="m-0 fw-normal"> {{$order->id}}</td>
                                 </td>
                                 <td>
-                                    <h5 class="m-0 fw-normal">محل تولين للملابس</h5>
-                                    <p class="mb-0 text-muted">
-                                        <small>منذ ٢٢ مارس ٢٠٢٣</small>
-                                    </p>
-                                </td>
-                                <td> ملابس </td>
-                                <td> ٣٤٢ طلبات </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 36px;">
-                                    <img src="assets/images/users/user-3.jpg" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm" />
+                                    <h5 class="m-0 fw-normal">{{$order->restaurant->name}}</h5>
                                 </td>
                                 <td>
-                                    <h5 class="m-0 fw-normal">مطعم الشهد</h5>
-                                    <p class="mb-0 text-muted">
-                                        <small>منذ ٢٣ مارس ٢٠٢٤</small>
-                                    </p>
-                                </td>
-                                <td> مطعم </td>
-                                <td> ٣٤٤ طلبات </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 36px;">
-                                    <img src="assets/images/users/user-3.jpg" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm" />
+                                    <h5 class="m-0 fw-normal">{{$order->amount}} {{__(config('app.currency'))}}</h5>
                                 </td>
                                 <td>
-                                    <h5 class="m-0 fw-normal">مطعم الشهد</h5>
                                     <p class="mb-0 text-muted">
-                                        <small>منذ ٢٣ مارس ٢٠٢٤</small>
+                                        <small>{{\Carbon\Carbon::parse($order->creared_at)->translatedFormat('l j F Y H:i:s')}}</small>
                                     </p>
                                 </td>
-                                <td> مطعم </td>
-                                <td> ٣٤٤ طلبات </td>
                             </tr>
-                            <tr>
-                                <td style="width: 36px;">
-                                    <img src="assets/images/users/user-3.jpg" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm" />
-                                </td>
-                                <td>
-                                    <h5 class="m-0 fw-normal">مطعم الشهد</h5>
-                                    <p class="mb-0 text-muted">
-                                        <small>منذ ٢٣ مارس ٢٠٢٤</small>
-                                    </p>
-                                </td>
-                                <td> مطعم </td>
-                                <td> ٣٤٤ طلبات </td>
-                            </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        {{__('no data available')}}
+                                    </td>
+                                </tr>
+
+                            @endif
+
                             </tbody>
                         </table>
                     </div>
@@ -238,46 +214,26 @@
                             </tr>
                             </thead>
                             <tbody>
+                            @if($data['top_products']->count()>0)
+                                @foreach($data['top_products'] as $key=>$top_product)
                             <tr>
                                 <td>
-                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
+                                    <h5 class="m-0 fw-normal">{{$top_product->food->name}}</h5>
                                 </td>
-                                <td> تولين للملابس </td>
-                                <td> ٣٤٣ طلبات </td>
-                                <td> ٤ </td>
+                                <td> {{$top_product->food->restaurant->name}} </td>
+                                <td> {{$top_product->food_count}} طلبات </td>
+                                <td>{{--\App\Modules\Core\Helper::calculate_restaurant_rating(json_encode($top_product->food->restaurant->rating))--}} </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
-                                </td>
-                                <td> تولين للملابس </td>
-                                <td> ٣٤٣ طلبات </td>
-                                <td> ٤ </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
-                                </td>
-                                <td> تولين للملابس </td>
-                                <td> ٣٤٣ طلبات </td>
-                                <td> ٤ </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
-                                </td>
-                                <td> تولين للملابس </td>
-                                <td> ٣٤٣ طلبات </td>
-                                <td> ٤ </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
-                                </td>
-                                <td> تولين للملابس </td>
-                                <td> ٣٤٣ طلبات </td>
-                                <td> ٤ </td>
-                            </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="9" class="text-center">
+                                        {{__('no data available')}}
+                                    </td>
+                                </tr>
+
+                            @endif
+
                             </tbody>
                         </table>
                     </div>

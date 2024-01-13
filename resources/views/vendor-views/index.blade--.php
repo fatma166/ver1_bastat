@@ -1,4 +1,4 @@
-@extends('layouts.admin.master')
+@extends('layouts.vendor.master')
 @section('title')
     {{__("index")}}
 @endsection
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-6">
                             <div class="text-end">
-                                <h3 class="text-dark mt-1">{{__(config('app.currency'))}} <span data-plugin="counterup">{{$data['monthly_order_amount']}}</span>
+                                <h3 class="text-dark mt-1">ر.س <span data-plugin="counterup">58</span>
                                 </h3>
                                 <p class="text-muted mb-1 text-truncate">الأرباح</p>
                             </div>
@@ -59,9 +59,9 @@
                         </div>
                         <div class="col-6">
                             <div class="text-end">
-                                <a href="{{route('admin.order.index')}}">
+                                <a href="./orders.html">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">{{$data['monthly_order_count']}}</span>
+                                        <span data-plugin="counterup">٣٤٣</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">عدد الطلبات</p>
                                 </a>
@@ -84,10 +84,10 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <a href="{{route('admin.place.index')}}">
+                            <a href="./places-list.html">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">{{$data['monthly_vendor_count']}}</span>
+                                        <span data-plugin="counterup">825</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">أصحاب محلات</p>
                                 </div>
@@ -111,9 +111,9 @@
                         </div>
                         <div class="col-6">
                             <div class="text-end">
-                                <a href="{{route('admin.customer.index')}}">
+                                <a href="./customers.html">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">{{$data['monthly_user_count']}}</span>
+                                        <span data-plugin="counterup">2,430</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">عدد المستخدمين</p>
                                 </a>
@@ -164,31 +164,58 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @if($data['top_restaurants']->count()>0)
-                                @foreach($data['top_restaurants'] as $key=>$top_restaurant)
                             <tr>
                                 <td style="width: 36px;">
-                                    <img src="{{asset($top_restaurant->image)}}" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm"  onerror="this.src='{{asset('assets/images/avatar.svg')}}'" />
+                                    <img src="assets/images/users/user-2.jpg" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm" />
                                 </td>
                                 <td>
-                                    <h5 class="m-0 fw-normal">{{$top_restaurant->name}}</h5>
+                                    <h5 class="m-0 fw-normal">محل تولين للملابس</h5>
                                     <p class="mb-0 text-muted">
-                                        <small>{{\Carbon\Carbon::parse($top_restaurant->creared_at)->translatedFormat('l j F Y H:i:s')}}</small>
+                                        <small>منذ ٢٢ مارس ٢٠٢٣</small>
                                     </p>
                                 </td>
-                                <td> {{$top_restaurant->compilation->title}} </td>
-                                <td> {{$top_restaurant->order_count}} طلبات </td>
+                                <td> ملابس </td>
+                                <td> ٣٤٢ طلبات </td>
                             </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="9" class="text-center">
-                                        {{__('no data available')}}
-                                    </td>
-                                </tr>
-
-                            @endif
-
+                            <tr>
+                                <td style="width: 36px;">
+                                    <img src="assets/images/users/user-3.jpg" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm" />
+                                </td>
+                                <td>
+                                    <h5 class="m-0 fw-normal">مطعم الشهد</h5>
+                                    <p class="mb-0 text-muted">
+                                        <small>منذ ٢٣ مارس ٢٠٢٤</small>
+                                    </p>
+                                </td>
+                                <td> مطعم </td>
+                                <td> ٣٤٤ طلبات </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36px;">
+                                    <img src="assets/images/users/user-3.jpg" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm" />
+                                </td>
+                                <td>
+                                    <h5 class="m-0 fw-normal">مطعم الشهد</h5>
+                                    <p class="mb-0 text-muted">
+                                        <small>منذ ٢٣ مارس ٢٠٢٤</small>
+                                    </p>
+                                </td>
+                                <td> مطعم </td>
+                                <td> ٣٤٤ طلبات </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 36px;">
+                                    <img src="assets/images/users/user-3.jpg" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm" />
+                                </td>
+                                <td>
+                                    <h5 class="m-0 fw-normal">مطعم الشهد</h5>
+                                    <p class="mb-0 text-muted">
+                                        <small>منذ ٢٣ مارس ٢٠٢٤</small>
+                                    </p>
+                                </td>
+                                <td> مطعم </td>
+                                <td> ٣٤٤ طلبات </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -211,26 +238,46 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @if($data['top_products']->count()>0)
-                                @foreach($data['top_products'] as $key=>$top_product)
                             <tr>
                                 <td>
-                                    <h5 class="m-0 fw-normal">{{$top_product->food->name}}</h5>
+                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
                                 </td>
-                                <td> {{$top_product->food->restaurant->name}} </td>
-                                <td> {{$top_product->food_count}} طلبات </td>
-                                <td>{{--\App\Modules\Core\Helper::calculate_restaurant_rating(json_encode($top_product->food->restaurant->rating))--}} </td>
+                                <td> تولين للملابس </td>
+                                <td> ٣٤٣ طلبات </td>
+                                <td> ٤ </td>
                             </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="9" class="text-center">
-                                        {{__('no data available')}}
-                                    </td>
-                                </tr>
-
-                            @endif
-
+                            <tr>
+                                <td>
+                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
+                                </td>
+                                <td> تولين للملابس </td>
+                                <td> ٣٤٣ طلبات </td>
+                                <td> ٤ </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
+                                </td>
+                                <td> تولين للملابس </td>
+                                <td> ٣٤٣ طلبات </td>
+                                <td> ٤ </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
+                                </td>
+                                <td> تولين للملابس </td>
+                                <td> ٣٤٣ طلبات </td>
+                                <td> ٤ </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h5 class="m-0 fw-normal">بنطلون رجالي</h5>
+                                </td>
+                                <td> تولين للملابس </td>
+                                <td> ٣٤٣ طلبات </td>
+                                <td> ٤ </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>

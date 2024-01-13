@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-
+use App\Http\Resources\Api\PopularRestaurantResource;
 class BannerResource extends JsonResource
 {
     /**
@@ -14,13 +14,13 @@ class BannerResource extends JsonResource
      */
     public function toArray($request)
     {
-      //  return parent::toArray($request);
+        //  return parent::toArray($request);
         return [
             'id'=>$this->id,
             'title'=>$this->title??"",
-            'type'=>$this->type??'restaurant_wise',
+            //'type'=>$this->type??'restaurant_wise',
             'image_url'=>$this->image_url??"",
-            "restaurant"=>$this->restaurant??"",
+            "restaurant"=>new PopularRestaurantResource($this->restaurant), //$this->restaurant??"",
             "food"=>$this->food??"",
             "module_place"=>$this->module_place??"",
             "priority"=>$this->priority??""

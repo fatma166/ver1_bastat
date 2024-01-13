@@ -28,7 +28,7 @@ $(document).ready(function() {
     getUrl=window.location;
     var baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
 
-    line_chart_url=baseUrl+"admin/line-chart";
+    line_chart_url=baseUrl+"/line-chart";
     // Line Chart
     $.ajax({
 

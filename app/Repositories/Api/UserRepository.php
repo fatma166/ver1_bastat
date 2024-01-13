@@ -28,8 +28,8 @@ class UserRepository implements UseInterface
         $address[ 'road']=$request->road;
         if($request->has('house'))
         $address [ 'house']=$request->house;
-        $address [ 'longitude']=$request->longitude;
-        $address [ 'latitude']=$request->latitude;
+        $address [ 'longitude']=$request->longi;
+        $address [ 'latitude']=$request->lati;
         $address [ 'zone_id']=$zone_ids[0];
         $address['created_at'] = now();
         $address['updated_at'] = now();

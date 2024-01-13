@@ -63,7 +63,12 @@ if( isset($this->restaurant)){
                // return $this->fav;
                        //  if(empty($this->fav)) return 0 ; else return 1;
 
-            })??0
+            })??0,
+            'foods'=> $this->whenLoaded('foods', function() {
+                    return $this->foods;
+                })??[],
+
+
         ];
     }
 }

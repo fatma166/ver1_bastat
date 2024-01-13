@@ -52,7 +52,10 @@ class Banner extends Model
     {
         return $this->belongsTo(Zone::class);
     }
-
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class,'place_id','id');
+    }
     public function scopeActive($query)
     {
         return $query->where('status', '=', 1);

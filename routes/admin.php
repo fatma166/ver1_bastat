@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminEmployeeController;
 use App\Http\Controllers\Admin\AdminRoleEmployeeController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BusinessSettingController;
 use App\Http\Controllers\Admin\CompilationController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -31,6 +32,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
     Route::group(['middleware' => ['admin']], function () {
         //dashboard
         Route::get('/', 'DashboardController@dashboard')->name('dashboard');
+        Route::get('line-chart', 'DashboardController@dashboard_data')->name('line-chart');
 
         Route::get('index_', 'DashboardController@index')->name('index_');
 
@@ -198,6 +200,18 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.'], fu
             Route::get('get-all-zone-cordinates/{id?}', 'ZoneController@get_all_zone_cordinates')->name('zoneCoordinates');
             //Route::post('export-zone-cordinates', 'ZoneController@export_zones')->name('export-zones');
             Route::get('export-zone-cordinates/{type}', 'ZoneController@export_zones')->name('export-zones');
+        });
+
+        Route::group(['prefix' => 'business_setting', 'as' => 'business_setting.'], function () {
+
+            Route::get('/', [BusinessSettingController::class, 'index'])->name('index');
+            Route::get('create', [BusinessSettingController::class, 'create'])->name('create');
+            Route::post('store', 'BusinessSettingController@store')->name('store');
+            Route::get('edit/{id}', 'BusinessSettingController@edit')->name('edit');
+            Route::post('update/{id}', 'BusinessSettingController@update')->name('update');
+            Route::post('change_status', 'BusinessSettingController@change_status')->name('change-status');
+            Route::delete('delete/{id}', 'BusinessSettingController@destroy')->name('delete');
+            Route::post('search', 'BusinessSettingController@search')->name('search');
         });
     });
 });

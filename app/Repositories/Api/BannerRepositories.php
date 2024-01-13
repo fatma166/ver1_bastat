@@ -34,7 +34,7 @@ class BannerRepositories implements BannerInterface
 
             foreach ($banners as  $banner) {
                 if ($banner->type == 'restaurant_wise') {
-                    $restaurant = Restaurant::find($banner->data);
+                    $restaurant = Restaurant::find($banner->place_id);
                     $banner->restaurant=$restaurant ? Helper::restaurant_data_formatting($restaurant, false) : "";
                    /* $data[] = [
                         'id' => $banner->id,

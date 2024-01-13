@@ -106,8 +106,10 @@ class User extends Authenticatable implements JWTSubject
     public function sendToken()
     {
 
-        $token = mt_rand(100000, 999999);
-        Session::put('token', $token);
+        $token= mt_rand(100000, 999999);
+
+        //Session::put('token', $token);
+
         $twilio = new Client($_ENV['TWILIO_SID'], $_ENV['TWILIO_AUTH_TOKEN']);
 
 
@@ -115,15 +117,17 @@ class User extends Authenticatable implements JWTSubject
             ->create($this->phone, // to
                 ["body" => "Your auth token is " . $token, "from" => "+14406893538"]
             );
+        return $token;
 
 
     }
 
-    public function validateToken($token)
+    public function validateToken($token,$phone)
     {
-        $validToken = Session::get('token');
-        if ($token == $validToken) {
-            Session::forget('token');
+
+        $validToken=Otp_code::where(['phone'=>$phone])->where('expire', '>', now())->value('otp_code');
+        if ($token==$validToken) {
+
             //Auth::login($this);
             return true;
         } else {

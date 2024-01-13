@@ -252,7 +252,8 @@ class Restaurant extends Model
     public function scopeRate($query)
     {
       //return $query->selectRaw('JSON_EXTRACT(rating, "$.*") as data'); exit;
-        return $query->orderByRaw('JSON_UNQUOTE(JSON_EXTRACT(rating, "$.5")) DESC');
+     //   return $query->orderByRaw('JSON_UNQUOTE(JSON_EXTRACT(rating, "$.5")) DESC');
+        return $query->orderByRaw('JSON_UNQUOTE(JSON_EXTRACT(rating, "$[5]")) DESC');
             //->get();
        // print_r($highestRate); exit;
 

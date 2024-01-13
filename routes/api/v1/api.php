@@ -43,6 +43,7 @@ Route::namespace('Api\V1\Auth')->prefix('auth')->group (function() {
     route::post('refresh','AuthUserController@refresh')->name('refresh_api')/*->withoutMiddleware([auth::class,'auth_api'])*/;
     route::post('check-login','AuthUserController@checkLogin')->name('check-login')/*->withoutMiddleware([auth::class,'auth_api'])*/;
     route::post('update-device-token','AuthUserController@updateDeviceToken')->name('update-fcm');
+    route::post('change-pass','AuthUserController@changePassword')->name('change-pass')->withoutMiddleware([auth::class,'auth_api']);
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Api\V1'], function () {
@@ -64,6 +65,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Api\V1'], function () {
 });
 /* home search*/
 Route::get('/home-search', [SearchController::class, 'home_search'])->withoutMiddleware('auth_api');
+Route::get('/home-search2', [SearchController::class, 'home_search2'])->withoutMiddleware('auth_api');
 Route::get('/advanced-rest-search', [SearchController::class, 'advanced_rest_search'])->withoutMiddleware('auth_api');
 /* get zones*/
 Route::get('/zones', [ZoneController::class, 'get_zones'])->withoutMiddleware('auth_api');
@@ -153,6 +155,7 @@ Route::namespace('Api\V1')->prefix('user')->group (function() {
         Route::post('/delete-address',[UserController::class,'delete_address'])->name('delete_address');
         Route::get('/info',[UserController::class,'info'])->name('user-info');
         Route::post('/edit-profile', [UserController::class,'edit_profile'])->name('edit-profile');
+        Route::post('/delete-profile', [UserController::class,'delete_profile'])->name('delete-profile');
         Route::get('notifications', [NotificationController::class,'get_notifications'])->name('notifications');
 
     });

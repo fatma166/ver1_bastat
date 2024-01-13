@@ -34,8 +34,18 @@ class RestaurantController extends Controller
             $location=[];
            if($request->filled('lati')&& $request->filled('lati'))
                 $location= array('lat' => $request['lati'], 'lng' => $request['longi']);
-
-            $filter_data=['compilation_id'=>$request->compilation_id];
+        $filter_data=[];
+        if($request->has('high_orders')&&$request->high_orders==1)
+            $filter_data['order_count']='asc';
+        if($request->has('high_rate')&&$request->high_rate==1)
+            $filter_data['high_rate']='asc';
+        if($request->has('delivery_time')&&$request->delivery_time==1)
+            $filter_data['delivery_time']='asc';
+        if($request->has('arrange_order'))
+            $filter_data['arrange_order']='desc';
+        $filter_data['compilation_id']=$request->compilation_id;
+        if($request->has('search')&&$request['search']!="")
+            $filter_data['name']=$request->search;
             $rest=new RestaurantRepository();
             $restaurants = $rest->get_restaurant($zone_ids,$filter_data,$limit,$offset,$location);
 

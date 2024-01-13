@@ -516,9 +516,9 @@ class Helper
 
     public static function module_permission_check($module_name)
     {
-        if (!auth('admin')->user()->role) {
+      /*  if (!auth('admin')->user()->role) {
             return false;
-        }
+        }*/
 
 
         $permission = auth('admin')->user()->role->modules;

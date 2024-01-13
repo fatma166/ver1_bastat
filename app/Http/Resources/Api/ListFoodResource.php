@@ -14,20 +14,24 @@ class ListFoodResource extends JsonResource
      */
     public function toArray($request)
     {
+        if($this->discount_type=="percent"){ $price_after=$this->price-($this->price*$this->discount/100); echo $price_after; exit;}else{$price_after=$this->price-$this->discount;}
         return //parent::toArray($request);
-        [
-            'id'=>$this->id,
-            'name'=>$this->name??"",
-            'description'=>$this->description??"",
-            'image_url'=>$this->image_url??"",
-            'category_id'=>$this->category_id??"",
-            'variations'=>$this->variations??[],
-            'choice_options'=>$this->choice_options??[],
-            'price'=>$this->price??0,
-            'restaurant_id'=>$this->restaurant_id,
-            'order_count'=>$this->order_count,
-            'avg_rating'=>$this->avg_rating,
-            'rating_count'=>$this->rating_count
+            [
+                'id'=>$this->id,
+                'name'=>$this->name??"",
+                'description'=>$this->description??"",
+                'image_url'=>$this->image_url??"",
+                'category_id'=>$this->category_id??"",
+                'variations'=>$this->variations??[],
+                'choice_options'=>$this->choice_options??[],
+                'price'=>$this->price??0,
+                'restaurant_id'=>$this->restaurant_id,
+                'order_count'=>$this->order_count,
+                'avg_rating'=>$this->avg_rating,
+                'rating_count'=>$this->rating_count,
+                'discount'=> $this->discount,
+                'discount_type'=> $this->discount_type,
+                'price_after_discount'=>$price_after,
 
 
 
@@ -35,6 +39,6 @@ class ListFoodResource extends JsonResource
 
 
 
-        ];
+            ];
     }
 }

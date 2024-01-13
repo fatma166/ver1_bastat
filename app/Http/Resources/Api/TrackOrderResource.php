@@ -31,8 +31,10 @@ class TrackOrderResource extends JsonResource
             'order_note'=>$this->order_note??"",
             'restaurant_id'=>$this->restaurant_id??0,
             'restaurant_name'=>$this->restaurant->name??"",
+            'restaurant_phone'=>$this->restaurant->phone??"",
             'delivery_time'=>$this->restaurant->delivery_time??0,
             'delivery_time_unit'=>$this->restaurant->delivery_time_unit?__($this->restaurant->delivery_time_unit):__("minutes"),
+
             'restaurant_logo_url'=>$this->restaurant->logo_url??"",
             'delivery_charge'=>$this->delivery_charge,
             'order_amount'=>$this->order_amount,

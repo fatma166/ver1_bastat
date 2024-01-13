@@ -35,6 +35,14 @@ class FoodController extends Controller
             $location= array('lat' => $request['lati'], 'lng' => $request['longi']);
         if($request->has('search'))
             $filter_data=['name'=>$request->search];
+        if($request->has('current_food')){
+            if(isset($filter_data['name'])){
+                $filter_data=['except_id'=>$request->current_food,'name'=>$request->search];
+            }else{
+                $filter_data=['except_id'=>$request->current_food];
+            }
+        }
+
         $food=new FoodRepository();
        $foods= $food->get_food($zone_ids,$restaurant_id,$category_ids,$limit,$offset,$location,$filter_data);
         return response()->json([
