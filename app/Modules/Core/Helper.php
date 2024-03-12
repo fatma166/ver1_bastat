@@ -18,29 +18,29 @@ class Helper
         if ($multi_data == true) {
             foreach ($data as $item) {
 
-               /* if(isset($item->fav)&&($item->fav!="" ||$item->fav!= null)){
-                    $data['fav']=1;
-                }else{
+                /* if(isset($item->fav)&&($item->fav!="" ||$item->fav!= null)){
+                     $data['fav']=1;
+                 }else{
 
-                    $data['fav']=0;
-                }*/
+                     $data['fav']=0;
+                 }*/
 
                 if ($item->opening_time) {
                     $item['available_time_starts'] = $item->opening_time->format('H:i');
                     unset($item['opening_time']);
                 }
                 if ($item->closeing_time) {
-                    $item['available_time_ends'] = $item->closeing_time->format('H:i')??"00:00:00";
+                    $item['available_time_ends'] = $item->closeing_time->format('H:i') ?? "00:00:00";
                     unset($item['closeing_time']);
                 }
 
-                $ratings =Helper::calculate_restaurant_rating($item['rating']);
+                $ratings = Helper::calculate_restaurant_rating($item['rating']);
 
                 unset($item['rating']);
-                $item['avg_rating'] = $ratings['rating']??0;
-                $item['rating_count'] = $ratings['total']??0;
-                if(isset($item['distance']))
-                    $item['distance_time']=ceil (($item['distance']/80)*60);
+                $item['avg_rating'] = $ratings['rating'] ?? 0;
+                $item['rating_count'] = $ratings['total'] ?? 0;
+                if (isset($item['distance']))
+                    $item['distance_time'] = ceil(($item['distance'] / 80) * 60);
                 array_push($storage, $item);
             }
             $data = $storage;
@@ -57,8 +57,8 @@ class Helper
             unset($data['rating']);
             $data['avg_rating'] = $ratings['rating'];
             $data['rating_count'] = $ratings['total'];
-            if(isset($data->distance))
-                $data['distance_time']=ceil (($data->distance/80)*60);
+            if (isset($data->distance))
+                $data['distance_time'] = ceil(($data->distance / 80) * 60);
 
 
         }
@@ -66,32 +66,31 @@ class Helper
 
         return $data;
     }
-    public  static function calculate_restaurant_rating($ratings)
+
+    public static function calculate_restaurant_rating($ratings)
     {
-        $total_submit = $ratings[0]+$ratings[1]+$ratings[2]+$ratings[3]+$ratings[4];
-      //  print_r($total_submit); exit;
-        $rating = ($ratings[0]*5+$ratings[1]*4+$ratings[2]*3+$ratings[3]*2+$ratings[4])/($total_submit?$total_submit:1);
-        return ['rating'=>$rating, 'total'=>$total_submit];
+        $total_submit = $ratings[0] + $ratings[1] + $ratings[2] + $ratings[3] + $ratings[4];
+        //  print_r($total_submit); exit;
+        $rating = ($ratings[0] * 5 + $ratings[1] * 4 + $ratings[2] * 3 + $ratings[3] * 2 + $ratings[4]) / ($total_submit ? $total_submit : 1);
+        return ['rating' => $rating, 'total' => $total_submit];
     }
 
-    public  static function update_restaurant_rating($ratings, $product_rating)
+    public static function update_restaurant_rating($ratings, $product_rating)
     {
-        $restaurant_ratings = [1=>0 , 2=>0, 3=>0, 4=>0, 5=>0];
-        if($ratings)
-        {
+        $restaurant_ratings = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+        if ($ratings) {
             $restaurant_ratings[1] = $ratings[4];
             $restaurant_ratings[2] = $ratings[3];
             $restaurant_ratings[3] = $ratings[2];
             $restaurant_ratings[4] = $ratings[1];
             $restaurant_ratings[5] = $ratings[0];
-            $restaurant_ratings[$product_rating] = $ratings[5-$product_rating] + 1;
-        }
-        else
-        {
+            $restaurant_ratings[$product_rating] = $ratings[5 - $product_rating] + 1;
+        } else {
             $restaurant_ratings[$product_rating] = 1;
         }
         return json_encode($restaurant_ratings);
     }
+
     public static function food_data_formatting($data, $multi_data = false, $trans = false, $local = 'en')
     {
         $storage = [];
@@ -126,14 +125,14 @@ class Helper
                 $item['category_ids'] = $categories;
                 $item['attributes'] = json_decode($item['attributes']);
                 $item['choice_options'] = json_decode($item['choice_options']);
-               // $item['add_ons'] = self::addon_data_formatting(AddOn::withoutGlobalScope('translate')->whereIn('id', json_decode($item['add_ons']))->active()->get(), true, $trans, $local);
-               /* foreach (json_decode($item['variations'], true) as $var) {
-                    array_push($variations, [
-                        'type' => $var['type'],
-                        'price' => (float)$var['price']
-                    ]);
-                }
-                $item['variations'] = $variations;*/
+                // $item['add_ons'] = self::addon_data_formatting(AddOn::withoutGlobalScope('translate')->whereIn('id', json_decode($item['add_ons']))->active()->get(), true, $trans, $local);
+                /* foreach (json_decode($item['variations'], true) as $var) {
+                     array_push($variations, [
+                         'type' => $var['type'],
+                         'price' => (float)$var['price']
+                     ]);
+                 }
+                 $item['variations'] = $variations;*/
                 $item['restaurant_name'] = $item->restaurant->name;
                 $item['restaurant_discount'] = self::get_restaurant_discount($item->restaurant) ? $item->restaurant->discount->discount : 0;
                 $item['restaurant_opening_time'] = $item->restaurant->opening_time ? $item->restaurant->opening_time->format('H:i') : null;
@@ -278,80 +277,78 @@ class Helper
 
         return $data;
     }
+
     public static function get_discount($coupon, $order_amount)
     {
         $discount_ammount = 0;
-        if($coupon->discount_type=='percent' && $coupon->discount > 0)
-        {
-            $discount_ammount = $order_amount* ($coupon->discount/100);
-        }
-        else
-        {
+        if ($coupon->discount_type == 'percentage' && $coupon->discount > 0) {
+            $discount_ammount = $order_amount * ($coupon->discount / 100);
+         
+        } else {
             $discount_ammount = $coupon->discount;
         }
-        if($coupon->max_discount > 0)
-        {
-            $discount_ammount = $discount_ammount > $coupon->max_discount?$coupon->max_discount:$discount_ammount;
+        if ($coupon->max_discount > 0) {
+            $discount_ammount = $discount_ammount > $coupon->max_discount ? $coupon->max_discount : $discount_ammount;
         }
         return $discount_ammount;
     }
 
 
     // copoun check
-    public static function is_valide($coupon, $user_id, $restaurant_id,$cart_items=[])
+    public static function is_valide($coupon, $user_id, $restaurant_id, $cart_items = [])
     {
 
         $start_date = Carbon::parse($coupon->start_date);
         $expire_date = Carbon::parse($coupon->expire_date);
 
         $today = Carbon::now();
-        if($start_date->format('Y-m-d') > $today->format('Y-m-d') || $expire_date->format('Y-m-d') < $today->format('Y-m-d'))
-        {
+        if ($start_date->format('Y-m-d') > $today->format('Y-m-d') || $expire_date->format('Y-m-d') < $today->format('Y-m-d')) {
             return 407;  //coupon expire
         }
 
-       /* if($coupon->coupon_type == 'restaurant_wise' && !in_array($restaurant_id, json_decode($coupon->data, true)))
-        {
-            return 404;
-        }
-        else if($coupon->coupon_type == 'zone_wise')
-        {
-            if(json_decode($coupon->data, true)){
-                $data = Restaurant::whereIn('zone_id',json_decode($coupon->data, true))->where('id', $restaurant_id)->first();
-                if(!$data)
-                {
-                    return 404;
-                }
-            }
-            else
-            {
-                return 404;
-            }
-        }
-        else if($coupon->coupon_type == 'first_order')
-        {
+        /* if($coupon->coupon_type == 'restaurant_wise' && !in_array($restaurant_id, json_decode($coupon->data, true)))
+         {
+             return 404;
+         }
+         else if($coupon->coupon_type == 'zone_wise')
+         {
+             if(json_decode($coupon->data, true)){
+                 $data = Restaurant::whereIn('zone_id',json_decode($coupon->data, true))->where('id', $restaurant_id)->first();
+                 if(!$data)
+                 {
+                     return 404;
+                 }
+             }
+             else
+             {
+                 return 404;
+             }
+         }*/
+        if ($coupon->coupon_type == 'first_order') {
+
+
             $total = Order::where(['user_id' => $user_id])->count();
-            if ($total < $coupon['limit']) {
+            if ($total < 1) {
                 return 200;
-            }else{
+            } else {
                 return 406;//Limite error
             }
-        }*/
+        }
         if ($coupon != null) {
-            $product_price=0;
-          //  $cart_items=$cart_items;
-           // print_r($cart_items); exit;
+            $product_price = 0;
+            //  $cart_items=$cart_items;
+            // print_r($cart_items); exit;
             foreach ($cart_items as $key => $value) {
                 $food = food::where('id', $value['food_id'])->first();
-                if(empty($food)){
+                if (empty($food)) {
                     return 400;
                 }
-                $product_price +=   $food ['price']* $value['quantity'];
+                $product_price += $food ['price'] * $value['quantity'];
             }
 
-            if($coupon) {
+            if ($coupon) {
 
-               // $coupon1=Coupon::active()->where(['code' => $coupon])->get();
+                // $coupon1=Coupon::active()->where(['code' => $coupon])->get();
 
 
                 if (isset($coupon['min_purchase'])) {
@@ -365,7 +362,7 @@ class Helper
                             'code' => 407
                         ], HTTPResponseCodes::Sucess['code']);*/
                         return __('min_purchase to apply coupon is ') . $coupon['min_purchase'];
-                     //   return (array('status'=>false,'msg'=> ));
+                        //   return (array('status'=>false,'msg'=> ));
                     }
 
                 }
@@ -376,12 +373,13 @@ class Helper
             $total = Order::where(['user_id' => $user_id, 'coupon_code' => $coupon['code']])->count();
             if ($total < $coupon['limit']) {
                 return 200;
-            }else{
+            } else {
                 return 406;//Limite orer
             }
         }
         return 404; //not found
     }
+
     public static function product_data_formatting($data, $multi_data = false, $trans = false, $local = 'en')
     {
         $storage = [];
@@ -389,7 +387,7 @@ class Helper
             foreach ($data as $item) {
                 $variations = [];
                 if ($item->title) {
-                    $item['name'] = $item->title ??"";
+                    $item['name'] = $item->title ?? "";
                     unset($item['title']);
                 }
                 if ($item->start_time) {
@@ -424,7 +422,7 @@ class Helper
                 }
                 $item['variations'] = $variations;
                 $item['restaurant_name'] = $item->restaurant->name;
-                 $item['restaurant_opening_time'] = $item->restaurant->opening_time ? $item->restaurant->opening_time->format('H:i') : null;
+                $item['restaurant_opening_time'] = $item->restaurant->opening_time ? $item->restaurant->opening_time->format('H:i') : null;
                 $item['restaurant_closing_time'] = $item->restaurant->closeing_time ? $item->restaurant->closeing_time->format('H:i') : null;
                 $item['schedule_order'] = $item->restaurant->schedule_order;
                 $item['rating_count'] = (int)($item->rating ? array_sum(json_decode($item->rating, true)) : 0);
@@ -446,7 +444,7 @@ class Helper
             // $data['category_ids'] = json_decode($data['category_ids']);
             $data['attributes'] = json_decode($data['attributes']);
             $data['choice_options'] = json_decode($data['choice_options']);
-             foreach (json_decode($data['variations'], true) as $var) {
+            foreach (json_decode($data['variations'], true) as $var) {
                 array_push($variations, [
                     'type' => $var['type'],
                     'price' => (float)$var['price']
@@ -474,7 +472,7 @@ class Helper
             }
             $data['variations'] = $variations;
             $data['restaurant_name'] = $data->restaurant->name;
-           $data['restaurant_opening_time'] = $data->restaurant->opening_time ? $data->restaurant->opening_time->format('H:i') : null;
+            $data['restaurant_opening_time'] = $data->restaurant->opening_time ? $data->restaurant->opening_time->format('H:i') : null;
             $data['restaurant_closing_time'] = $data->restaurant->closeing_time ? $data->restaurant->closeing_time->format('H:i') : null;
             $data['schedule_order'] = $data->restaurant->schedule_order;
             $data['rating_count'] = (int)($data->rating ? array_sum(json_decode($data->rating, true)) : 0);
@@ -486,12 +484,13 @@ class Helper
 
         return $data;
     }
+
     public static function get_restaurant_id()
     {
         if (auth('vendor_employee')->check()) {
             return auth('vendor_employee')->user()->restaurant->id;
         }
-       // echo(auth('vendor')->user()->restaurants[0]->id); exit;
+        // echo(auth('vendor')->user()->restaurants[0]->id); exit;
         return auth('vendor')->user()->restaurants[0]->id;
     }
 
@@ -504,6 +503,7 @@ class Helper
         }
         return 0;
     }
+
     public static function get_vendor_data()
     {
         if (auth('vendor')->check()) {
@@ -516,9 +516,9 @@ class Helper
 
     public static function module_permission_check($module_name)
     {
-      /*  if (!auth('admin')->user()->role) {
-            return false;
-        }*/
+        /*  if (!auth('admin')->user()->role) {
+              return false;
+          }*/
 
 
         $permission = auth('admin')->user()->role->modules;
@@ -530,6 +530,7 @@ class Helper
         }
         return false;
     }
+
     public static function format_coordiantes($coordinates)
     {
         // print_r($coordinates); exit;
@@ -543,10 +544,10 @@ class Helper
 
     public static function product_discount_calculate($product, $price, $restaurant_discount)
     {
-      //  $restaurant_discount = self::get_restaurant_discount($restaurant);
+        //  $restaurant_discount = self::get_restaurant_discount($restaurant);
         if (isset($restaurant_discount)) {
             $price_discount = ($price / 100) * $restaurant_discount['discount'];
-        } else if ($product['discount_type'] == 'percent') {
+        } else if ($product['discount_type'] == 'percentage') {
             $price_discount = ($price / 100) * $product['discount'];
         } else {
             $price_discount = $product['discount'];
@@ -559,7 +560,7 @@ class Helper
 
         try {
 
-            $status =$order->order_status;
+            $status = $order->order_status;
             $value = __($status);
             if ($value) {
                 $data = [
@@ -602,7 +603,4 @@ class Helper
         }
         return false;
     }
-
-
-
 }

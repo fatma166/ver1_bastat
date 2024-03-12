@@ -64,7 +64,7 @@ class FoodRepository implements FoodInterface
         $foods=$paginator->paginate($limit, ['*'], 'page', $offset);
 
      //  print_r( DB::getQueryLog()); exit;
-      //  print_r($foods); exit;
+       //print_r($foods); exit;
         return ListFoodResource::collection($foods);
        /* $data =  [
             'total_size' => $foods->total(),
@@ -73,7 +73,7 @@ class FoodRepository implements FoodInterface
             'products' => $foods->items()
         ];*/
 
-        return($data);exit;
+     //   return($data);exit;
 
     }
 

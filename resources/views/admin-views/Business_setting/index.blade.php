@@ -64,9 +64,9 @@
                                     <a href="{{route('admin.business_setting.edit',['id'=>$setting_->id])}}" class="action-icon">
                                         <i class="mdi mdi-square-edit-outline"></i>
                                     </a>
-                                    <a href="{{route('admin.business_setting.delete',['id'=>$setting_->id])}}" class="action-icon">
+                                   {{--<a href="{{route('admin.business_setting.delete',['id'=>$setting_->id])}}" class="action-icon">
                                         <i class="mdi mdi-delete"></i>
-                                    </a>
+                                    </a>--}}
                                 </td>
                             </tr>
                                 @endforeach

@@ -203,8 +203,6 @@ class OrderController extends Controller
 
     public function cart_order(OrderRequest $request)
     {
-
-
         try {
             $cart=new OrderRepository();
             $cart = $cart->cart_order($request);

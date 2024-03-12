@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\AdminRole;
 use App\Models\Compilation;
+use App\Models\Country;
+use App\Models\Currency;
 use App\Models\Zone;
 use App\Repositories\Admin\SingleRebo\AdminEmployeeRepository;
 use App\Repositories\Admin\SingleRebo\AdminRoleEmployeeRepository;
@@ -64,8 +66,11 @@ class BusinessSettingController extends BaseController
 
     public function edit($id)
     {
+        $countries=Country::where('active',1)->get();
+        $currencies=Currency::/*where('active',1)->*/get();
+
         $record= parent::show($id);
-        return view($this->view . 'edit', compact('record'));
+        return view($this->view . 'edit', compact('record','countries','currencies'));
     }
 
     public function update(Request $request, $id)

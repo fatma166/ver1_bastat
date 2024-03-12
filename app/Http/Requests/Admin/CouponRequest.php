@@ -31,6 +31,7 @@ class CouponRequest extends FormRequest
         return [
             'title' => 'required',
             'code' => 'required',
+            'coupon_type' => 'required',
             'restaurant_id' => 'required|numeric|exists:restaurants,id',
             'compilation_id' => 'required|numeric|exists:compilations,id',
             'start_date' => 'required',
@@ -54,6 +55,7 @@ class CouponRequest extends FormRequest
         return [
             'title' => __('title'),
             'code' => __('code'),
+            'coupon_type' => __('coupon_type'),
             'restaurant_id' => __('restaurant_id'),
             'compilation_id' => __('compilation_id'),
             'start_date' => __('start_date'),

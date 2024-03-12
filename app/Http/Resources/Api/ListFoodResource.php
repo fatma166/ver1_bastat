@@ -14,7 +14,7 @@ class ListFoodResource extends JsonResource
      */
     public function toArray($request)
     {
-        if($this->discount_type=="percent"){ $price_after=$this->price-($this->price*$this->discount/100); echo $price_after; exit;}else{$price_after=$this->price-$this->discount;}
+        if($this->discount_type=="percent"){ $price_after=$this->price-($this->price*$this->discount/100); }else{$price_after=$this->price-$this->discount;}
         return //parent::toArray($request);
             [
                 'id'=>$this->id,
@@ -32,6 +32,8 @@ class ListFoodResource extends JsonResource
                 'discount'=> $this->discount,
                 'discount_type'=> $this->discount_type,
                 'price_after_discount'=>$price_after,
+                'in_stock'=>$this->in_stock,
+                'product_quantity'=>$this->product_quantity
 
 
 

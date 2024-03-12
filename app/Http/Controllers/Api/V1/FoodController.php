@@ -45,6 +45,7 @@ class FoodController extends Controller
 
         $food=new FoodRepository();
        $foods= $food->get_food($zone_ids,$restaurant_id,$category_ids,$limit,$offset,$location,$filter_data);
+
         return response()->json([
             'status' => HTTPResponseCodes::Sucess['status'],
             'message'=>HTTPResponseCodes::Sucess['message'],

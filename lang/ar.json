@@ -110,7 +110,9 @@
     "customer": "المشتريين",
     "zone_added_successfully": "تم اضافة المنطقه بنجاح",
     "Coordinatesdraw_your_zone_on_the_map": "ارسم حدود المنطقه علي الخريطه",
-    "Status Changed succesfully": "تم تغيير الحاله بنجاج"
+    "Status Changed succesfully": "تم تغيير الحاله بنجاج",
+    "SR":"ر.س",
+    "EGP":"جنيه"
 
 
 

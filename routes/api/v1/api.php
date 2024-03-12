@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\BannerController;
+use App\Http\Controllers\Api\V1\BusinessSettingController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\CompilationController;
 use App\Http\Controllers\Api\V1\FoodController;
@@ -27,7 +28,11 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::namespace('Api\V1')->prefix('business_setting')->group (function() {
 
+    route::get('get_country',[BusinessSettingController::class, 'get_defaultcountry'])->name('get_country')->withoutMiddleware([auth::class, 'auth_api']);
+    route::get('get_currency',[BusinessSettingController::class, 'get_currency'])->name('get_currency')->withoutMiddleware([auth::class, 'auth_api']);
+});
 Route::namespace('Api\V1\Auth')->prefix('auth')->group (function() {
 
     route::post('login','AuthUserController@login')->name('login_api')->withoutMiddleware([auth::class,'auth_api']);

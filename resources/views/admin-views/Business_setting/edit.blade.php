@@ -28,7 +28,35 @@
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
+                                @if($record->key=="default_country")
+                                    <div class="mb-3">
+                                        <label for="projectname" class="form-label">القيمه</label>
 
+                                      <select name="value" class="form-control" >
+
+                                         @foreach($countries as $index=>$country)
+                                             <option value="{{$country->code2}}">{{$country->country_name}}</option>
+                                          @endforeach
+                                      </select>
+                                        @error("value")
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @endError
+                                    </div>
+                                    @elseif($record->key=="currency")
+                                    <div class="mb-3">
+                                        <label for="projectname" class="form-label">القيمه</label>
+
+                                        <select name="value" class="form-control" >
+
+                                            @foreach($currencies as $index=>$country)
+                                                <option value="{{$country->currency_code}}">{{$country->currency_code}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error("value")
+                                        <span class="text-danger">{{ $message }}</span>
+                                        @endError
+                                    </div>
+                                    @else
                                 <div class="mb-3">
                                     <label for="projectname" class="form-label">القيمه</label>
                                     <input type="text" id="projectname" name="value"  value="{{$record->value}}" class="form-control" placeholder="القيمه">
@@ -36,6 +64,7 @@
                                     <span class="text-danger">{{ $message }}</span>
                                     @endError
                                 </div>
+                                    @endif
 
                             </div>
                             <!-- end col-->

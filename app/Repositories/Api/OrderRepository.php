@@ -56,7 +56,11 @@ class OrderRepository implements OrderInterface
         $total_price = $product_price- $coupon_discount_amount ;
         $tax = 0;//$restaurant->tax;
         $total_tax_amount= ($tax > 0)?(($total_price * $tax)/100):0;
-        $shipping_coast=$restaurant->delivery_charge;
+        if($coupon['coupon_type']=='free_delivery'){
+            $shipping_coast = 0;
+        }else {
+            $shipping_coast = $restaurant->delivery_charge;
+        }
 
         if(($restaurant['minimum_order']) > $product_price )
         {
@@ -114,6 +118,25 @@ class OrderRepository implements OrderInterface
         }*/
 
         //print_r($request->all());
+        $cart_items=$request['cart_items'];
+        foreach ($cart_items as $key => $value) {
+
+            $food = food::where('id', $value['food_id'])->first();
+
+            if($food['product_quantity']<$value['quantity']){
+
+                return response()->json([
+                    'status' =>false,
+                    'errors'=>__('order_stock_out'),
+                    'message' =>__('one of order item out of stock'),
+                    'data' => [],
+                    'code'=>406
+                ],HTTPResponseCodes::Sucess['code']);
+
+            }
+
+        }
+
 
         // TODO: Implement cart_order() method.
 
@@ -177,7 +200,9 @@ class OrderRepository implements OrderInterface
 
             }
             if (isset($coupon)) {
+
                 $staus = Helper::is_valide($coupon, $request->user()->id ,$request['restaurant_id']);
+                echo $staus;
                 if($staus==407)
                 {
                     return response()->json([
@@ -210,12 +235,7 @@ class OrderRepository implements OrderInterface
                         'code'=>HTTPResponseCodes::BadRequest['code']
                     ],HTTPResponseCodes::Sucess['code']);
                 }
-                /* if($coupon->coupon_type == 'free_delivery')
-                 {
-                     $delivery_charge = 0;
-                     $coupon = null;
-                     $free_delivery_by = 'admin';
-                 }*/
+                /* */
             } else {
                 return response()->json([
                     'status' =>false,
@@ -225,6 +245,7 @@ class OrderRepository implements OrderInterface
                     'code'=>HTTPResponseCodes::BadRequest['code']
                 ],HTTPResponseCodes::Sucess['code']);
             }
+
         }
         // end cupon
 
@@ -232,6 +253,11 @@ class OrderRepository implements OrderInterface
         if($request['order_type'] == 'take_away')
         {
             $shipping_coast=0;
+        }else if($coupon->coupon_type == 'free_delivery')
+        {
+            $shipping_coast = 0;
+            $coupon = null;
+            $free_delivery_by = 'admin';
         }else{
             $shipping_coast=$restaurant->delivery_charge;
         }
@@ -309,6 +335,7 @@ class OrderRepository implements OrderInterface
             $total_tax_amount= ($tax > 0)?(($total_price * $tax)/100):0;
              */
             $coupon_discount_amount=$data_cal['coupon_discount_amount'];
+
             $product_price=$data_cal['product_price'];
             $tax=$data_cal['tax'];
             $total_price = $product_price- $coupon_discount_amount ;
@@ -341,6 +368,54 @@ class OrderRepository implements OrderInterface
                     'code'=>409
                 ],HTTPResponseCodes::Sucess['code']);
             }
+            foreach ($cart_items as $key => $value) {
+
+                $food = food::where('id', $value['food_id'])->first();
+
+                if($food['product_quantity']<$value['quantity']){
+
+                    return response()->json([
+                        'status' =>false,
+                        'errors'=>__('order_stock_out'),
+                        'message' =>__('one of order item out of stock'),
+                        'data' => [],
+                        'code'=>406
+                    ],HTTPResponseCodes::Sucess['code']);
+
+                }
+                // Retrieve the product
+                $product = Food::find($value['food_id']);
+
+                if ($product) {
+                    // Get the current quantity
+                    $currentQuantity = $product->product_quantity;
+
+                    // Decrease the quantity by $value['quantity']
+                    $newQuantity = $currentQuantity - $value['quantity'];
+                     if($newQuantity>=0) {
+                         // Update the product's quantity
+                         $product->product_quantity = $newQuantity;
+                         $product->save();
+                     }else{
+                         // Update the product's quantity
+                         $product->product_quantity = 0;
+                         $product->	in_stock = 0;
+                         $product->save();
+                         return response()->json([
+                             'status' =>false,
+                             'errors'=>__('order_stock_out1'),
+                             'message' =>__('one of order item out of stock'),
+                             'data' => [],
+                             'code'=>406
+                         ],HTTPResponseCodes::Sucess['code']);
+
+                     }
+                    // return $newQuantity;
+                }
+
+
+            }
+
 
             try {
                 $order->coupon_discount_amount = round($coupon_discount_amount, 2);//config('round_up_to_digit')

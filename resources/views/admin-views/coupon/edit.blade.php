@@ -36,6 +36,18 @@
                                     @endError
                                 </div>
                                 <div class="mb-3">
+                                    <label for="couponcode" class="form-label">نوع الكوبون</label>
+                                    <select type="text" name="coupon_type" class="form-control @error("coupon_type") is-invalid @endError" >
+
+                                        <option value="default" @if($record->coupon_type=="default")selected @endif>{{__('default')}}</option>
+                                        <option value="first_order" @if($record->coupon_type=="first_order")selected @endif>{{__('first_order')}}</option>
+                                        <option value="free_delivery" @if($record->coupon_type=="free_delivery")selected @endif>{{__('free_delivery')}}</option>
+                                    </select>
+                                    @error("code")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
+                                </div>
+                                <div class="mb-3">
                                     <label for="example-date" class="form-label">تاريخ بداية الكوبون</label>
                                     <input type="date"  name="start_date" value="{{$record->start_date->format('Y-m-d')}}"  class="form-control @error("start_date") is-invalid @endError" id="example-date" >
                                     @error("start_date")

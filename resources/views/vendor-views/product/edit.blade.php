@@ -125,7 +125,21 @@
 
                         </div>
                     </div>
+                    <div class="mb-3 status_">
+                        <label class="mb-2">حالة المخزون <span class="text-danger">*</span></label>
+                        <br/>
+                        <div class="d-flex flex-wrap">
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="radio" name="in_stock" value="1" id="inlineRadio1" @if($record->in_stock==1)checked @endif>
+                                <label class="form-check-label" for="inlineRadio1">في المخزون</label>
+                            </div>
+                            <div class="form-check me-2">
+                                <input class="form-check-input" type="radio" name="in_stock" value="0" id="inlineRadio2" @if($record->in_stock==0)checked @endif>
+                                <label class="form-check-label" for="inlineRadio2">غير متوفر</label>
+                            </div>
 
+                        </div>
+                    </div>
 
                 </div>
             </div> <!-- end card -->

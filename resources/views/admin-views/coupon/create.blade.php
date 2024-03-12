@@ -29,6 +29,18 @@
                                     @endError
                                 </div>
                                 <div class="mb-3">
+                                    <label for="couponcode" class="form-label">نوع الكوبون</label>
+                                    <select type="text"  name="coupon_type" class="form-control @error("coupon_type") is-invalid @endError" value="{{old('coupon_type')}}">
+
+                                        <option value="default">{{__('default')}}</option>
+                                        <option value="first_order">{{__('first_order')}}</option>
+                                        <option value="free_delivery">{{__('free_delivery')}}</option>
+                                    </select>
+                                    @error("code")
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @endError
+                                </div>
+                                <div class="mb-3">
                                     <label for="couponcode" class="form-label">كود الكوبون</label>
                                     <input type="text"  name="code" value="{{old('code')}}" id="couponcode" class="form-control @error("code") is-invalid @endError" placeholder="ادخل كود الكوبون كمثال #867575">
                                     @error("code")

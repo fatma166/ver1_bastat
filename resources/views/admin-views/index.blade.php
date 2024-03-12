@@ -12,14 +12,14 @@
                 <div class="page-title-right">
                     <form class="d-flex align-items-center mb-3">
                         <div class="input-group input-group-sm">
-                            <input type="text" class="form-control border" id="dash-daterange">
+                            <input type="text" class="form-control border " id="dash-daterange">
                             <span class="input-group-text bg-blue border-blue text-white">
                           <i class="mdi mdi-calendar-range"></i>
                         </span>
                         </div>
                     </form>
                 </div>
-                <h4 class="page-title">مرحباً معاذ ،</h4>
+                <h4 class="page-title">مرحباً {{Auth::guard('admin')->user()->f_name}} ,</h4>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-6">
                             <div class="text-end">
-                                <h3 class="text-dark mt-1">{{__(config('app.currency'))}} <span data-plugin="counterup">{{$data['monthly_order_amount']}}</span>
+                                <h3 class="text-dark mt-1">{{__(config('app.currency'))}} <span  class="order_amount" data-plugin="counterup">{{$data['monthly_order_amount']}}</span>
                                 </h3>
                                 <p class="text-muted mb-1 text-truncate">الأرباح</p>
                             </div>
@@ -61,7 +61,7 @@
                             <div class="text-end">
                                 <a href="{{route('admin.order.index')}}">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">{{$data['monthly_order_count']}}</span>
+                                        <span class="order_count" data-plugin="counterup">{{$data['monthly_order_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">عدد الطلبات</p>
                                 </a>
@@ -87,7 +87,7 @@
                             <a href="{{route('admin.place.index')}}">
                                 <div class="text-end">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">{{$data['monthly_vendor_count']}}</span>
+                                        <span  class="vendor_count" data-plugin="counterup">{{$data['monthly_vendor_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">أصحاب محلات</p>
                                 </div>
@@ -113,7 +113,7 @@
                             <div class="text-end">
                                 <a href="{{route('admin.customer.index')}}">
                                     <h3 class="text-dark mt-1">
-                                        <span data-plugin="counterup">{{$data['monthly_user_count']}}</span>
+                                        <span class="user_count" data-plugin="counterup">{{$data['monthly_user_count']}}</span>
                                     </h3>
                                     <p class="text-muted mb-1 text-truncate">عدد المستخدمين</p>
                                 </a>
@@ -165,20 +165,22 @@
                             </thead>
                             <tbody>
                             @if($data['top_restaurants']->count()>0)
+
                                 @foreach($data['top_restaurants'] as $key=>$top_restaurant)
-                            <tr>
-                                <td style="width: 36px;">
-                                    <img src="{{asset($top_restaurant->image)}}" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm"  onerror="this.src='{{asset('assets/images/avatar.svg')}}'" />
-                                </td>
-                                <td>
-                                    <h5 class="m-0 fw-normal">{{$top_restaurant->name}}</h5>
-                                    <p class="mb-0 text-muted">
-                                        <small>{{\Carbon\Carbon::parse($top_restaurant->creared_at)->translatedFormat('l j F Y H:i:s')}}</small>
-                                    </p>
-                                </td>
-                                <td> {{$top_restaurant->compilation->title}} </td>
-                                <td> {{$top_restaurant->order_count}} طلبات </td>
-                            </tr>
+
+                                    <tr>
+                                        <td style="width: 36px;">
+                                            <img src="{{asset($top_restaurant->logo)}}" alt="contact-img" title="contact-img" class="rounded-circle avatar-sm"  onerror="this.src='{{asset('assets/images/avatar.svg')}}'" />
+                                        </td>
+                                        <td>
+                                            <h5 class="m-0 fw-normal">{{$top_restaurant->name}}</h5>
+                                            <p class="mb-0 text-muted">
+                                                <small>{{\Carbon\Carbon::parse($top_restaurant->creared_at)->translatedFormat('l j F Y H:i:s')}}</small>
+                                            </p>
+                                        </td>
+                                        <td> {{$top_restaurant->compilation->title}} </td>
+                                        <td> {{$top_restaurant->orders_count}} طلبات </td>
+                                    </tr>
                                 @endforeach
                             @else
                                 <tr>
@@ -207,20 +209,23 @@
                                 <th>اسم المنتج</th>
                                 <th>اسم المكان</th>
                                 <th>عدد الطلبات</th>
-                                <th>التقييم</th>
+
                             </tr>
                             </thead>
                             <tbody>
                             @if($data['top_products']->count()>0)
                                 @foreach($data['top_products'] as $key=>$top_product)
-                            <tr>
-                                <td>
-                                    <h5 class="m-0 fw-normal">{{$top_product->food->name}}</h5>
-                                </td>
-                                <td> {{$top_product->food->restaurant->name}} </td>
-                                <td> {{$top_product->food_count}} طلبات </td>
-                                <td>{{--\App\Modules\Core\Helper::calculate_restaurant_rating(json_encode($top_product->food->restaurant->rating))--}} </td>
-                            </tr>
+                                    @if(!isset($top_product->food->restaurant->name))
+                                        @continue
+                                    @endif
+                                    <tr>
+                                        <td>
+                                            <h5 class="m-0 fw-normal">{{$top_product->food->name}}</h5>
+                                        </td>
+                                        <td> {{$top_product->food->restaurant->name}} </td>
+                                        <td> {{$top_product->food_count}} طلبات </td>
+                                    <!-- <td>{{--\App\Modules\Core\Helper::calculate_restaurant_rating(json_encode($top_product->food->restaurant->rating))--}} </td>-->
+                                    </tr>
                                 @endforeach
                             @else
                                 <tr>
@@ -243,3 +248,19 @@
     </div>
     <!-- end row -->
 @endsection
+@push('script')
+    <script src="{{asset('assets/libs/flatpickr/flatpickr.min.js')}}"></script>
+    <script>
+
+        /*   flatpickr("#dash-daterange", {
+               dateFormat: "m Y",
+               minDate: "today",
+               mode: "single",
+
+               // Additional options can be added here
+           });*/
+
+    </script>
+
+
+@endpush
